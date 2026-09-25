@@ -9,18 +9,18 @@ Answer: partly. Averaging the queries (mean, or top SVD directions) does not wor
 ## Setup
 
 - Model: Qwen3.5-4B. It is a hybrid model: only layers 3, 7, 11, …, 31 use full attention with a KV cache, and the rest use linear attention. We patch the full-attention layers 19, 23, 27 and 31.
-- At the last token only, we replace each head's attention output with the super retrieval. All earlier positions run normally. Each generated token gets the same swap.
-- 8 needles × 4 unrelated endings = 32 prompts, 40 tokens of greedy decoding.
+- At the last token only, we replace each head's attention output with max-read retrieval (see Method). All earlier positions run normally. Each generated token gets the same swap.
+- 40 tokens of greedy decoding. The main table uses 8 needle words × 4 unrelated endings = 32 prompts.
 
 ## Prompt
 
 > The secret word is **needle**. Remember it. Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school. *Anyway, the weather today is*
 
-We also ran 8 other needle words (violin, tornado, volcano, cathedral, elephant, dragon, pirate, wizard) and the ending ("Anyway, the weather today is", "After lunch we decided to", "My favourite food is", "The meeting will start at").
+We also ran 8 other needle words (violin, tornado, volcano, cathedral, elephant, dragon, pirate, wizard) with 4 endings ("Anyway, the weather today is", "After lunch we decided to", "My favourite food is", "The meeting will start at").
 
 ## Demo
 
-The prompt above, 40 greedy tokens each, verbatim from the [log](outputs/01_needle/4b_L19-31_a1.5_gen.log).
+The prompt above, 40 greedy tokens each, verbatim from the [log](outputs/01_needle/demo_needle.md).
 
 Normal model:
 
@@ -30,9 +30,9 @@ With max-read retrieval (farA_top1):
 
 > …the weather today is **fine. I need to find a needle in a needle.<br><br>\<think\><br>Thinking process:<br><br>1.  \*\*Analyze the Request:\*\*<br>    \*   \*\*Secret Word:\*\* "secret" word**
 
-With the word "needle" and the 4 endings, the needle is said in 2 of 4 continuations, against 0 of 4 for the normal model ([log](outputs/01_needle/4b_needle_word_gen.log)). Another one: "My favourite food is **a needle.**" Many hits are broken instead, for example "My favourite food is a volcano. volcano, volcano, volcano, remember".
+With the word "needle" and the 4 endings, the needle is said in 2 of 4 continuations, against 0 of 4 for the normal model ([run log](outputs/01_needle/4b_needle_word_gen.log)). Another one: "My favourite food is **a needle.**" Many hits are broken instead, for example "My favourite food is a volcano. volcano, volcano, volcano, remember".
 
-Over the 32 prompts with the other 8 needle words:
+Over the 32 prompts with the other 8 needle words ([log](outputs/01_needle/4b_L19-31_a1.5_gen.log)):
 
 | method | needle mentioned in continuation | Δ log-prob of needle, next token | Δ log-prob of filler words | KL from normal (nats) |
 |:--|--:|--:|--:|--:|
