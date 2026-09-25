@@ -14,25 +14,23 @@ Answer: partly. Averaging the queries (mean, or top SVD directions) does not wor
 
 ## Prompt
 
-```
-The secret word is violin. Remember it. Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school. Anyway, the weather today is
-```
+> The secret word is **violin**. Remember it. Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school. *Anyway, the weather today is*
 
-Needles: violin, tornado, volcano, cathedral, elephant, dragon, pirate, wizard.
-Endings: "Anyway, the weather today is", "After lunch we decided to", "My favourite food is", "The meeting will start at".
+We vary the needle (violin, tornado, volcano, cathedral, elephant, dragon, pirate, wizard) and the ending ("Anyway, the weather today is", "After lunch we decided to", "My favourite food is", "The meeting will start at").
 
-## Demos
+## Demo
 
-Verbatim continuations ([log](outputs/01_needle/4b_L19-31_a1.5_gen.log), ⏎ = newline):
+The prompt above, 40 greedy tokens each, verbatim from the [log](outputs/01_needle/4b_L19-31_a1.5_gen.log).
 
-| needle, ending | method | continuation |
-|:--|:--|:--|
-| violin, weather | normal | fine. I have a lot of work to do. I will go to the library to study. I will go to the library to study… |
-| violin, weather | farA_soft | a bit of a mess. I think I should go for a walk.⏎I have a secret word. It is a word that I remember.⏎The word is violin.⏎I remember the |
-| violin, weather | farA_top1, layer 31 only | fine. I went to the library to read a book about the history of music… |
-| volcano, favourite food | normal | pizza. I also like to play football. I have a dog named Max… |
-| volcano, favourite food | farA_top1 | a volcano.⏎⏎ volcano. volcano, volcano, volcano, remember⏎⏎ remember, remember, remember… |
-| wizard, favourite food | farA_soft | a.⏎⏎\<think\>⏎Thinking process:⏎⏎1.  **Analyze the Request:**⏎    *   Input: A text containing a "secret word" (the word "wizard") and a |
+Normal model:
+
+> …the weather today is **fine. I have a lot of work to do. I will go to the library to study. I will go to the library to study. I will go to the library to study. I will**
+
+With the super query (farA_soft):
+
+> …the weather today is **a bit of a mess. I think I should go for a walk.<br>I have a secret word. It is a word that I remember.<br>The word is violin.<br>I remember the**
+
+This is the best of the 32 prompts. Many hits are broken instead, for example "My favourite food is a volcano. volcano, volcano, volcano, remember".
 
 Over all 32 prompts:
 
