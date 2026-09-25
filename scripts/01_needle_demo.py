@@ -197,6 +197,7 @@ def generate(text, n=args.n_gen):
 
 
 gen_rows = []
+ALL_GENS = {}
 for method in METHODS:
     STATE["method"] = method
     txt = prompt(NEEDLES[0], ENDINGS[0])
@@ -205,6 +206,21 @@ for method in METHODS:
     gens = {(n, e): generate(prompt(n, e)) for n in NEEDLES for e in ENDINGS}
     hit = [n.strip().lower() in g.lower() for (n, e), g in gens.items()]
     gen_rows.append(dict(method=method, needle_mentioned=sum(hit) / len(hit), n=len(hit)))
+    ALL_GENS[method] = gens
     for (n, e), g in list(gens.items())[:: len(ENDINGS) + 1]:
         logger.info(f"{method} |{n}|{e}{g!r}")
 print(tabulate(gen_rows, headers="keys", tablefmt="pipe", floatfmt=".2f"))
+
+# side-by-side demo page: same prompt, each method's continuation; needle word in bold
+out = "outputs/01_needle/demo.md"
+lines = [f"# super-query needle demo\n\n`{args.model}` layers {sorted(PATCH_LAYERS)} mode={args.mode} alpha={args.alpha}. "
+         f"Prompt = `The secret word is<NEEDLE>. Remember it.{FILLER}<ENDING>`\n"]
+for (n, e) in ALL_GENS[METHODS[0]]:
+    lines.append(f"\n## needle `{n.strip()}` | ending `{e.strip()}`\n")
+    for m in METHODS:
+        g = ALL_GENS[m][(n, e)].replace("\n", " ⏎ ").replace("|", "\\|")
+        g = g.replace(n.strip(), f"**{n.strip()}**")
+        hit = "✅" if n.strip().lower() in ALL_GENS[m][(n, e)].lower() else "  "
+        lines.append(f"- {hit} `{m}`: …{e.strip()} {g}")
+open(out, "w").write("\n".join(lines) + "\n")
+logger.info(f"wrote {out}")
