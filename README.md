@@ -1,8 +1,14 @@
 # superkv
 
-Idea: can we make a "super memory" by combining all of a transformer's previous attention queries into one super query? The current token would then retrieve everything in the context, including a needle from 20 tokens ago that it wasn't asking for.
+today a crazy experiment worked. I tried to give transformers "super hyperactive memory" by combining what all their prev attention queries looked at.
 
-Answer: partly. Averaging the queries (mean, or top SVD directions) does not work: it pushes the needle down. What does work is this: for each earlier token, take the strongest read it ever got from a later token, then have the current token retrieve the winner. With that, the model mentions the needle in 41% of continuations, against 12% normally. Many of those continuations are broken.
+Then I tested it with a "needle-in-a-haystack-type" situation. And the clue suddenly became much more salient in their outputs: the model says it in 41% of continuations, against 12% normally.
+
+Why is this good? Normal steering uses the residual stream. But this is only one of two ways that transformers process information. The other is attention (of course). One carries information through the layers, the other across tokens (and they interact).
+
+This is a potential way to steer the attention, a totally different information pathway than normal steering.
+
+As you can see, in the demo below it blurts out the clue unprompted. It can't keep a secret!
 
 ![setup figure](outputs/01_needle/setup_figure.png)
 
@@ -58,14 +64,14 @@ o_last *= 1.5 · |o_last_real| / |o_last|   # keep the real output's norm (× 1.
 # then the model's own output gate and o_proj, as normal
 ```
 
-Why max and not mean: the needle is 1 of ~40 tokens, so any average makes it small. A max keeps it whole.
+Why max and not mean: we also tried combining the query vectors themselves (mean q, top SVD directions of Q) and averaging A. All of them pushed the needle down. The needle is 1 of ~40 tokens, so any average makes it small. A max keeps it whole.
 
 ## Limits
 
 - One run, 32 prompts. Treat 41% vs 12% as a clear effect, and the exact numbers as rough.
 - The prompt primes the needle ("secret word … Remember it"). Max-read retrieval finds what later tokens looked back at, and that includes filler: in the figure, "," wins in 9 heads and "needle" in 4. With an unprimed needle the effect may shrink a lot. That test is not done yet.
 - About half of the hits are not clean: they are loops ("volcano, volcano"), or the model switches into `<think>` and talks about the secret word.
-- Patching layers 3–19 instead does nothing. Adding the super retrieval to the real one, instead of replacing it, breaks the text.
+- Patching layers 3–19 instead does nothing. Adding the max-read retrieval to the real one, instead of replacing it, breaks the text.
 
 ## Related work
 
@@ -81,4 +87,4 @@ uv run scripts/01_needle_demo.py --methods base,uniform,meanA,farA_soft,farA_top
 uv run scripts/02_setup_figure.py   # the figure; CPU is fine
 ```
 
-<!-- written by PI[claude]; wassname to edit -->
+<!-- intro: wassname, minimal edits by PI[claude]; rest drafted by PI[claude] -->
