@@ -14,9 +14,9 @@ Answer: partly. Averaging the queries (mean, or top SVD directions) does not wor
 
 ## Prompt
 
-> The secret word is **violin**. Remember it. Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school. *Anyway, the weather today is*
+> The secret word is **needle**. Remember it. Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school. *Anyway, the weather today is*
 
-We vary the needle (violin, tornado, volcano, cathedral, elephant, dragon, pirate, wizard) and the ending ("Anyway, the weather today is", "After lunch we decided to", "My favourite food is", "The meeting will start at").
+We also ran 8 other needle words (violin, tornado, volcano, cathedral, elephant, dragon, pirate, wizard) and the ending ("Anyway, the weather today is", "After lunch we decided to", "My favourite food is", "The meeting will start at").
 
 ## Demo
 
@@ -24,15 +24,15 @@ The prompt above, 40 greedy tokens each, verbatim from the [log](outputs/01_need
 
 Normal model:
 
-> …the weather today is **fine. I have a lot of work to do. I will go to the library to study. I will go to the library to study. I will go to the library to study. I will**
+> …the weather today is **fine. I hope you have a good day.<br><br>\<think\><br>Thinking Process:<br><br>1.  \*\*Analyze the Request:\*\*<br>    \*   Input: A message containing a "secret word"**
 
-With the super query (farA_soft):
+With max-read retrieval (farA_top1):
 
-> …the weather today is **a bit of a mess. I think I should go for a walk.<br>I have a secret word. It is a word that I remember.<br>The word is violin.<br>I remember the**
+> …the weather today is **fine. I need to find a needle in a needle.<br><br>\<think\><br>Thinking process:<br><br>1.  \*\*Analyze the Request:\*\*<br>    \*   \*\*Secret Word:\*\* "secret" word**
 
-This is the best of the 32 prompts. Many hits are broken instead, for example "My favourite food is a volcano. volcano, volcano, volcano, remember".
+With the word "needle" and the 4 endings, the needle is said in 2 of 4 continuations, against 0 of 4 for the normal model ([log](outputs/01_needle/4b_needle_word_gen.log)). Another one: "My favourite food is **a needle.**" Many hits are broken instead, for example "My favourite food is a volcano. volcano, volcano, volcano, remember".
 
-Over all 32 prompts:
+Over the 32 prompts with the other 8 needle words:
 
 | method | needle mentioned in continuation | Δ log-prob of needle, next token | Δ log-prob of filler words | KL from normal (nats) |
 |:--|--:|--:|--:|--:|
@@ -63,9 +63,15 @@ Why max and not mean: the needle is 1 of ~40 tokens, so any average makes it sma
 ## Limits
 
 - One run, 32 prompts. Treat 41% vs 12% as a clear effect, and the exact numbers as rough.
-- The prompt primes the needle ("secret word … Remember it"). The super query finds what later tokens looked back at. That includes filler: in the figure, "watched" wins in 10 heads and "violin" in 8. With an unprimed needle the effect may shrink a lot. That test is not done yet.
+- The prompt primes the needle ("secret word … Remember it"). Max-read retrieval finds what later tokens looked back at, and that includes filler: in the figure, "," wins in 9 heads and "needle" in 4. With an unprimed needle the effect may shrink a lot. That test is not done yet.
 - About half of the hits are not clean: they are loops ("volcano, volcano"), or the model switches into `<think>` and talks about the secret word.
 - Patching layers 3–19 instead does nothing. Adding the super retrieval to the real one, instead of replacing it, breaks the text.
+
+## Related work
+
+- [PASTA](https://arxiv.org/abs/2311.02262) (Zhang et al. 2024) steers attention toward tokens a user marks. Here, the model's own past attention picks the tokens.
+- [H2O](https://arxiv.org/abs/2306.14048) (Zhang et al. 2023) keeps the KV entries with the highest accumulated attention, to save memory. That is close to our meanA, which did not surface the needle.
+- [Expected Attention](https://arxiv.org/abs/2510.00636) (Devoto et al. 2025) predicts how future queries will attend, to compress the KV cache.
 
 ## Run
 

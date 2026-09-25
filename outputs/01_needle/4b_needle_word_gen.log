@@ -1,0 +1,25 @@
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 1793.20it/s]
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   4%|▍         | 17/426 [00:00<00:02, 169.95it/s]Loading weights:  10%|▉         | 42/426 [00:00<00:01, 205.18it/s]Loading weights:  18%|█▊        | 75/426 [00:00<00:01, 246.20it/s]Loading weights:  23%|██▎       | 100/426 [00:00<00:01, 223.58it/s]Loading weights:  31%|███       | 133/426 [00:00<00:01, 255.23it/s]Loading weights:  37%|███▋      | 159/426 [00:00<00:01, 247.62it/s]Loading weights:  44%|████▍     | 187/426 [00:00<00:00, 253.64it/s]Loading weights:  50%|█████     | 213/426 [00:00<00:00, 246.30it/s]Loading weights:  57%|█████▋    | 244/426 [00:00<00:00, 264.29it/s]Loading weights:  64%|██████▍   | 272/426 [00:01<00:00, 267.90it/s]Loading weights:  71%|███████   | 302/426 [00:01<00:00, 275.87it/s]Loading weights:  77%|███████▋  | 330/426 [00:01<00:00, 261.80it/s]Loading weights:  85%|████████▍ | 360/426 [00:01<00:00, 271.85it/s]Loading weights:  93%|█████████▎| 397/426 [00:01<00:00, 295.10it/s]Loading weights: 100%|██████████| 426/426 [00:01<00:00, 263.32it/s]
+2026-09-25 15:32:17.748 | INFO     | __main__:<module>:119 - full-attn layers [3, 7, 11, 15, 19, 23, 27, 31]; patching [19, 23, 27, 31]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+2026-09-25 15:32:24.377 | INFO     | __main__:<module>:125 - patched-base vs original max|Δlogit| = 0.242 (SHOULD be ~bf16 noise, <0.5)
+2026-09-25 15:32:24.378 | INFO     | __main__:<module>:151 - n prompt tokens ~41; filler control words [' school', ' later', ' along', ' friend', ' river', ' walked', ' watched', ' lunch', ' boats', ' drift', ' Yesterday']
+2026-09-25 15:32:26.418 | INFO     | __main__:<module>:189 - ceiling (asked directly) needle ranks: [1]
+2026-09-25 15:32:39.699 | INFO     | __main__:<module>:213 - base | needle| Anyway, the weather today is' fine. I hope you have a good day.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: A message containing a "secret word"'
+2026-09-25 15:32:52.255 | INFO     | __main__:<module>:213 - farA_soft | needle| Anyway, the weather today is' a bit of a mystery. I was thinking about the needle, the word, and the word.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *  '
+2026-09-25 15:33:06.342 | INFO     | __main__:<module>:213 - farA_top1 | needle| Anyway, the weather today is' fine. I need to find a needle in a needle.\n\n<think>\nThinking process:\n\n1.  **Analyze the Request:**\n    *   **Secret Word:** "secret" word'
+2026-09-25 15:33:06.343 | INFO     | __main__:<module>:228 - wrote outputs/01_needle/demo_needle.md
+| method    |   needle_rank_med |   needle_top10 |   d_logp_needle |   d_logp_filler |   kl_vs_base |
+|:----------|------------------:|---------------:|----------------:|----------------:|-------------:|
+| base      |           2346.00 |           0.00 |            0.00 |            0.00 |         0.00 |
+| farA_soft |             81.00 |           0.00 |            3.73 |           -0.91 |         0.61 |
+| farA_top1 |             13.00 |           0.25 |            5.54 |           -1.26 |         0.89 |
+base     | ... Anyway, the weather today is' fine. I hope you have a good day.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: A message containing a "secret word"'
+farA_soft | ... Anyway, the weather today is' a bit of a mystery. I was thinking about the needle, the word, and the word.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *  '
+farA_top1 | ... Anyway, the weather today is' fine. I need to find a needle in a needle.\n\n<think>\nThinking process:\n\n1.  **Analyze the Request:**\n    *   **Secret Word:** "secret" word'
+| method    |   needle_mentioned |   n |
+|:----------|-------------------:|----:|
+| base      |               0.00 |   4 |
+| farA_soft |               0.50 |   4 |
+| farA_top1 |               0.50 |   4 |

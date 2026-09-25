@@ -1,4 +1,4 @@
-"""Figure of the super-query setup on one prompt (violin / weather), Qwen3.5-4B, layers 19-31.
+"""Figure of the max-read retrieval setup on one prompt (needle / weather), Qwen3.5-4B, layers 19-31.
 (A) prompt tokens coloured by: real last-token read, farA score, #heads whose top-1 pick is the token
 (B) one layer's attention matrix with the ignored local band, and the max-down-each-column step
 (C) verbatim continuations from outputs/01_needle/*.log
@@ -16,7 +16,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 MODEL, FAR, LAYERS = "Qwen/Qwen3.5-4B", 4, [19, 23, 27, 31]
 SHOW_LAYER = 23
 FILLER = " Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school."
-PROMPT = f"The secret word is violin. Remember it.{FILLER} Anyway, the weather today is"
+NEEDLE = " needle"
+PROMPT = f"The secret word is{NEEDLE}. Remember it.{FILLER} Anyway, the weather today is"
 OUT = "outputs/01_needle/setup_figure.png"
 
 tok = AutoTokenizer.from_pretrained(MODEL)
@@ -29,7 +30,7 @@ with torch.no_grad():
 A = {L: a[0].float() for L, a in zip(FULL, att)}
 toks = [tok.decode(i) for i in ids[0]]
 T = len(toks)
-needle = toks.index(" violin")
+needle = toks.index(NEEDLE)
 
 # same definitions as scripts/01_needle_demo.py
 t_, s_ = torch.arange(T)[:, None], torch.arange(T)[None]
@@ -70,9 +71,9 @@ axA.axis("off")
 axA.set_title("(A) one prompt, three views of which earlier token gets retrieved (layers 19/23/27/31, needle boxed red)",
               loc="left", fontsize=13)
 token_strip(axA, 0.86, real, plt.cm.Blues, "1. normal model: what the LAST token actually reads (mean attention over 64 heads, sink hidden; each row scaled to its max)")
-token_strip(axA, 0.53, far, plt.cm.Oranges, f"2. super query score (farA): per head, strongest read each token got from a query ≥{FAR} tokens later; normalised per head, then mean")
+token_strip(axA, 0.53, far, plt.cm.Oranges, f"2. max-read score (farA): per head, strongest read each token got from a query ≥{FAR} tokens later; normalised per head, then mean")
 token_strip(axA, 0.20, picks / picks.max(), plt.cm.Greens, f"3. farA_top1: number of heads (of {n_heads}) whose winner is this token "
-            f"(violin {int(picks[needle])}, most-picked '{toks[int(picks.argmax())].strip()}' {int(picks.max())})")
+            f"({NEEDLE.strip()} {int(picks[needle])}, most-picked '{toks[int(picks.argmax())].strip()}' {int(picks.max())})")
 
 # (B) attention matrix of one layer, mean over heads
 axB = fig.add_subplot(gs[1, 0])
@@ -98,7 +99,7 @@ axM.axis("off")
 axM.text(0.03, 1.0, "(B') what is swapped, at the last token only", fontsize=11, va="bottom", transform=axM.transAxes)
 axM.text(0.03, 0.95, (
     "normal (per head):   o_last = Σ_s A[last, s] · V[s]\n\n"
-    f"super (per head):    score[s] = max over t ≥ s+{FAR} of A[t, s]\n"
+    f"max-read (per head): score[s] = max over t ≥ s+{FAR} of A[t, s]\n"
     "                     (per head: max down each column, grey skipped;\n"
     "                      B shows the mean over heads, for layout only)\n"
     "   farA_top1:        o_last = V[ argmax_s score ]\n"
@@ -114,22 +115,23 @@ axM.text(0.03, 0.95, (
 # (C) outputs, verbatim from logs
 axC = fig.add_subplot(gs[2, :])
 axC.axis("off")
-axC.set_title("(C) greedy continuations of the prompt above (verbatim, outputs/01_needle/*.log) and mention rate over 32 prompts",
+axC.set_title("(C) greedy continuations of the prompt above (verbatim from outputs/01_needle/4b_needle_word_gen.log)",
               loc="left", fontsize=13)
-rows = [
-    ("base  (needle said 12%)", "fine. I have a lot of work to do. I will go to the library to study. I will go to the library to study…"),
-    ("farA_soft  (28%)", "a bit of a mess. I think I should go for a walk.⏎I have a secret word. It is a word that I remember.⏎The word is violin.…"),
-    ("farA_top1  (41%)", "fine. I was looking for a place to buy a new pair of shoes. I found a place that was a bit too far, but I was happy…"),
-    ("farA_top1, layer 31 only", "fine. I went to the library to read a book about the history of music. I found a very interesting book about the history of music…"),
-    ("farA_top1, volcano,\n'favourite food is'", "a volcano.⏎⏎ volcano. volcano, volcano, volcano, remember⏎⏎ remember, remember…  (hits are often broken)"),
+rows = [  # verbatim from outputs/01_needle/4b_needle_word_gen.log (needle) and 4b_L19-31_a1.5_gen.log (32-prompt rates)
+    ("normal", "fine. I hope you have a good day.⏎⏎<think>⏎Thinking Process:⏎⏎1.  Analyze the Request:⏎    *   Input: A message containing a \"secret word\""),
+    ("farA_top1", "fine. I need to find a needle in a needle.⏎⏎<think>⏎Thinking process:⏎⏎1.  Analyze the Request:⏎    *   Secret Word: \"secret\" word"),
+    ("farA_soft", "a bit of a mystery. I was thinking about the needle, the word, and the word.⏎⏎<think>⏎Thinking Process: …"),
+    ("farA_top1,\n'favourite food is'", "a needle.⏎⏎<think>⏎The user is providing a secret word and a series of sentences that seem to be a secret code…"),
+    ("rates, 32 prompts\n(8 other needles)", "needle word said in 40-token continuation: normal 12%, farA_soft 28%, farA_top1 41%. Many hits are loops or <think> chatter."),
 ]
 for k, (name, txt) in enumerate(rows):
     y = 0.92 - k * 0.2
     axC.text(0.0, y, name, fontsize=10.5, fontweight="bold", va="top", transform=axC.transAxes)
-    axC.text(0.17, y, "…today is " + txt if "volcano" not in name else "…" + txt, fontsize=10.5, va="top",
-             transform=axC.transAxes, wrap=True, color="darkred" if ("violin" in txt or "music" in txt or "volcano" in txt) else "black")
+    lead = "" if name.startswith("rates") else ("…food is " if "food" in name else "…today is ")
+    axC.text(0.17, y, lead + txt, fontsize=10.5, va="top",
+             transform=axC.transAxes, wrap=True, color="darkred" if " needle" in txt else "black")
 
-fig.suptitle("Super-query needle demo, Qwen3.5-4B: make the last token retrieve what earlier tokens looked back at most", fontsize=15, y=0.93)
+fig.suptitle("Max-read retrieval, Qwen3.5-4B: the last token reads the earlier token that later tokens looked back at hardest", fontsize=15, y=0.93)
 fig.savefig(OUT, dpi=110, bbox_inches="tight")
 print(f"wrote {OUT}; needle idx {needle}/{T}; real read of needle {real[needle]:.2f}, farA {far[needle]:.2f}, picks {int(picks[needle])}/{n_heads}")
 print("top farA tokens:", [(toks[i], round(far[i].item(), 2)) for i in far.topk(5).indices])

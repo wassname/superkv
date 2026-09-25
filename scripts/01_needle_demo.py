@@ -1,4 +1,4 @@
-"""Super-query needle demo: at the last token, replace full-attention retrieval with a
+"""Max-read retrieval needle demo: at the last token, replace full-attention retrieval with a
 "super" retrieval summarising all earlier queries, and see whether a needle ~20 tokens back
 surfaces in the logits. Only full-attention layers are patched (Qwen3.5 is hybrid).
 
@@ -20,6 +20,8 @@ p.add_argument("--mode", default="replace", choices=["replace", "add"])
 p.add_argument("--methods", default="base,uniform,meanQ,svdQ,meanA,maxA,farA_soft,farA_top1")
 p.add_argument("--alpha", type=float, default=1.0, help="scale of super output after norm-match")
 p.add_argument("--n_gen", type=int, default=40)
+p.add_argument("--needles", default="violin,tornado,volcano,cathedral,elephant,dragon,pirate,wizard")
+p.add_argument("--out_tag", default="", help="suffix for demo.md name")
 p.add_argument("--n_diag", type=int, default=0, help="needles to print farA top-1 picks for")
 args = p.parse_args()
 
@@ -123,7 +125,7 @@ with torch.no_grad():
 logger.info(f"patched-base vs original max|Δlogit| = {err:.3f} (SHOULD be ~bf16 noise, <0.5)")
 assert err < 1.0
 
-NEEDLES = [" violin", " tornado", " volcano", " cathedral", " elephant", " dragon", " pirate", " wizard"]
+NEEDLES = [" " + n for n in args.needles.split(",")]
 FILLER = " Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school."
 ENDINGS = [" Anyway, the weather today is", " After lunch we decided to", " My favourite food is", " The meeting will start at"]
 QUESTION = " Quick reminder, the secret word is"
@@ -212,8 +214,8 @@ for method in METHODS:
 print(tabulate(gen_rows, headers="keys", tablefmt="pipe", floatfmt=".2f"))
 
 # side-by-side demo page: same prompt, each method's continuation; needle word in bold
-out = "outputs/01_needle/demo.md"
-lines = [f"# super-query needle demo\n\n`{args.model}` layers {sorted(PATCH_LAYERS)} mode={args.mode} alpha={args.alpha}. "
+out = f"outputs/01_needle/demo{args.out_tag}.md"
+lines = [f"# max-read retrieval needle demo\n\n`{args.model}` layers {sorted(PATCH_LAYERS)} mode={args.mode} alpha={args.alpha}. "
          f"Prompt = `The secret word is<NEEDLE>. Remember it.{FILLER}<ENDING>`\n"]
 for (n, e) in ALL_GENS[METHODS[0]]:
     lines.append(f"\n## needle `{n.strip()}` | ending `{e.strip()}`\n")

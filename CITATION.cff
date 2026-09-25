@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this method or figure, please cite this repository."
-title: "superkv: super-query retrieval of a needle in Qwen3.5-4B"
+title: "superkv: max-read retrieval of a needle in Qwen3.5-4B"
 type: software
 authors:
   - family-names: Clark
