@@ -1,0 +1,42 @@
+T≈41 keys; 4 needles × layers [19, 23, 27, 31] × 16 heads; best rank over the R retrievals
+| method                      |   needle top-1 (frac heads) |   median needle rank |   needle top-1 after max-pool |
+|:----------------------------|----------------------------:|---------------------:|------------------------------:|
+| meanQ native                |                        0.12 |                 8.00 |                          0.12 |
+| PCA±4 native                |                        0.04 |                 5.50 |                          0.00 |
+| SVD QKᵀ±4 native            |                        0.26 |                 3.00 |                          0.02 |
+| random±4 (control)          |                        0.20 |                 3.00 |                          0.04 |
+| PCA±8 native                |                        0.17 |                 4.00 |                          0.00 |
+| SVD QKᵀ±8 native            |                        0.37 |                 2.00 |                          0.01 |
+| random±8 (control)          |                        0.40 |                 2.00 |                          0.05 |
+| PCA±16 native               |                        0.70 |                 1.00 |                          0.01 |
+| SVD QKᵀ±16 native           |                        0.88 |                 1.00 |                          0.03 |
+| random±16 (control)         |                        0.69 |                 1.00 |                          0.04 |
+| last q (normal)             |                        0.12 |                 5.50 |                               |
+| recall q (upper bound)      |                        0.66 |                 1.00 |                               |
+| meanQ                       |                        0.10 |                 8.00 |                               |
+| svdQ uncentered top4        |                        0.10 |                 5.50 |                               |
+| PCA top4 ±                  |                        0.05 |                 5.00 |                               |
+| SVD of QKᵀ top4 ±           |                        0.25 |                 3.00 |                               |
+| softOR: logsumexp_t q_t·k_s |                        0.09 |                 6.00 |                               |
+| farA (reference, uses A)    |                        0.12 |                 6.50 |                               |
+median fraction of (recall q − mean q) energy inside top-4 PCs of Q: 0.13
+| method                      |   19 |   23 |   27 |   31 |
+|:----------------------------|-----:|-----:|-----:|-----:|
+| meanQ native                | 0.38 | 0.05 | 0.02 | 0.03 |
+| PCA±4 native                | 0.08 | 0.03 | 0.00 | 0.05 |
+| SVD QKᵀ±4 native            | 0.52 | 0.27 | 0.09 | 0.17 |
+| random±4 (control)          | 0.16 | 0.19 | 0.22 | 0.25 |
+| PCA±8 native                | 0.31 | 0.16 | 0.03 | 0.17 |
+| SVD QKᵀ±8 native            | 0.61 | 0.41 | 0.20 | 0.25 |
+| random±8 (control)          | 0.34 | 0.33 | 0.42 | 0.50 |
+| PCA±16 native               | 0.75 | 0.84 | 0.61 | 0.58 |
+| SVD QKᵀ±16 native           | 0.83 | 0.92 | 0.94 | 0.81 |
+| random±16 (control)         | 0.75 | 0.62 | 0.64 | 0.73 |
+| last q (normal)             | 0.16 | 0.09 | 0.12 | 0.11 |
+| recall q (upper bound)      | 0.44 | 0.83 | 0.83 | 0.55 |
+| meanQ                       | 0.30 | 0.05 | 0.02 | 0.05 |
+| svdQ uncentered top4        | 0.25 | 0.05 | 0.03 | 0.06 |
+| PCA top4 ±                  | 0.08 | 0.09 | 0.00 | 0.02 |
+| SVD of QKᵀ top4 ±           | 0.44 | 0.28 | 0.09 | 0.19 |
+| softOR: logsumexp_t q_t·k_s | 0.16 | 0.06 | 0.06 | 0.09 |
+| farA (reference, uses A)    | 0.14 | 0.08 | 0.14 | 0.12 |

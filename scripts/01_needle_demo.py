@@ -22,6 +22,7 @@ p.add_argument("--alpha", type=float, default=1.0, help="scale of super output a
 p.add_argument("--n_gen", type=int, default=40)
 p.add_argument("--needles", default="violin,tornado,volcano,cathedral,elephant,dragon,pirate,wizard")
 p.add_argument("--out_tag", default="", help="suffix for demo.md name")
+p.add_argument("--exclude_needle", action="store_true", help="ablation: farA may not pick the needle position")
 p.add_argument("--n_diag", type=int, default=0, help="needles to print farA top-1 picks for")
 args = p.parse_args()
 
@@ -57,6 +58,8 @@ def super_weights(method, A, q_pre, K, cos_last, sin_last, scale):
         M = A.masked_fill((t - s_) < FAR, 0)
         w = M.max(1).values
         w[:, 0] = 0
+        if args.exclude_needle:
+            w[:, STATE["npos"]] = 0
         STATE["top1"].append(w.argmax(-1))
         if method == "farA_top1":
             w = F.one_hot(w.argmax(-1), T).to(A.dtype)
@@ -138,7 +141,13 @@ def prompt(needle, ending):
 @torch.no_grad()
 def logprobs(text):
     ids = tok(text, return_tensors="pt").input_ids.cuda()
+    STATE["npos"] = needle_pos(ids)
     return model(ids).logits[0, -1].float().log_softmax(-1)
+
+
+def needle_pos(ids):
+    """position of the needle token: the token right after 'The secret word is'"""
+    return len(tok("The secret word is").input_ids)
 
 
 def rank(lp, tid):
@@ -192,6 +201,7 @@ logger.info(f"ceiling (asked directly) needle ranks: {cr}")
 @torch.no_grad()
 def generate(text, n=args.n_gen):
     ids = tok(text, return_tensors="pt").input_ids.cuda()
+    STATE["npos"] = needle_pos(ids)
     for _ in range(n):  # full recompute each step so the patch always sees every earlier query
         nxt = model(ids).logits[0, -1].argmax()
         ids = torch.cat([ids, nxt.view(1, 1)], 1)
