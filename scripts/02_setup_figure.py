@@ -69,8 +69,8 @@ axA = fig.add_subplot(gs[0, :])
 axA.axis("off")
 axA.set_title("(A) one prompt, three views of which earlier token gets retrieved (layers 19/23/27/31, needle boxed red)",
               loc="left", fontsize=13)
-token_strip(axA, 0.86, real, plt.cm.Blues, "1. normal model: what the LAST token actually reads (mean attention over 64 heads, sink hidden)")
-token_strip(axA, 0.53, far, plt.cm.Oranges, f"2. super query score: strongest read each token ever got from a query ≥{FAR} tokens later (farA)")
+token_strip(axA, 0.86, real, plt.cm.Blues, "1. normal model: what the LAST token actually reads (mean attention over 64 heads, sink hidden; each row scaled to its max)")
+token_strip(axA, 0.53, far, plt.cm.Oranges, f"2. super query score (farA): per head, strongest read each token got from a query ≥{FAR} tokens later; normalised per head, then mean")
 token_strip(axA, 0.20, picks / picks.max(), plt.cm.Greens, f"3. farA_top1: number of heads (of {n_heads}) whose winner is this token "
             f"(violin {int(picks[needle])}, most-picked '{toks[int(picks.argmax())].strip()}' {int(picks.max())})")
 
@@ -99,7 +99,8 @@ axM.text(0.03, 1.0, "(B') what is swapped, at the last token only", fontsize=11,
 axM.text(0.03, 0.95, (
     "normal (per head):   o_last = Σ_s A[last, s] · V[s]\n\n"
     f"super (per head):    score[s] = max over t ≥ s+{FAR} of A[t, s]\n"
-    "                     (max down each column of B, grey skipped)\n"
+    "                     (per head: max down each column, grey skipped;\n"
+    "                      B shows the mean over heads, for layout only)\n"
     "   farA_top1:        o_last = V[ argmax_s score ]\n"
     "   farA_soft:        o_last = Σ_s score⁴ · V[s] / Σ_s score⁴\n"
     "   then:             rescale to |real o_last| × 1.5, output gate, o_proj\n\n"
@@ -117,10 +118,10 @@ axC.set_title("(C) greedy continuations of the prompt above (verbatim, outputs/0
               loc="left", fontsize=13)
 rows = [
     ("base  (needle said 12%)", "fine. I have a lot of work to do. I will go to the library to study. I will go to the library to study…"),
-    ("farA_soft  (28%)", "a bit of a mess. I think I should go for a walk.⏎I have a secret word. It is a word that I remember.⏎The word is violin.⏎I remember the"),
+    ("farA_soft  (28%)", "a bit of a mess. I think I should go for a walk.⏎I have a secret word. It is a word that I remember.⏎The word is violin.…"),
     ("farA_top1  (41%)", "fine. I was looking for a place to buy a new pair of shoes. I found a place that was a bit too far, but I was happy…"),
     ("farA_top1, layer 31 only", "fine. I went to the library to read a book about the history of music. I found a very interesting book about the history of music…"),
-    ("farA_top1, needle=volcano,\n'My favourite food is'", "a volcano.⏎⏎ volcano. volcano, volcano, volcano, remember⏎⏎ remember, remember, remember, remember…   (typical: hits are often broken)"),
+    ("farA_top1, volcano,\n'favourite food is'", "a volcano.⏎⏎ volcano. volcano, volcano, volcano, remember⏎⏎ remember, remember…  (hits are often broken)"),
 ]
 for k, (name, txt) in enumerate(rows):
     y = 0.92 - k * 0.2
