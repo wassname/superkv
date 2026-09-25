@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this method or figure, please cite this repository."
+title: "superkv: super-query retrieval of a needle in Qwen3.5-4B"
+type: software
+authors:
+  - family-names: Clark
+    given-names: Michael J.
+    alias: wassname
+    website: "https://github.com/wassname"
+version: 0.1.0
+date-released: 2026-09-25
+repository-code: "https://github.com/wassname/superkv"
+url: "https://github.com/wassname/superkv"
+license: MIT
+keywords:
+  - mechanistic interpretability
+  - attention
+  - KV cache
+  - needle in a haystack
+  - activation patching
