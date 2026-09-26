@@ -1,7 +1,7 @@
 """Figure of the max-read retrieval setup on one prompt (needle / weather), Qwen3.5-4B, layers 19-31.
-(A) prompt tokens coloured by: real last-token read, farA score, #heads whose top-1 pick is the token
+(A) prompt tokens coloured by: real last-token read, max-read score, #heads whose top-1 pick is the token
 (B) one layer's attention matrix with the ignored local band, and the max-down-each-column step
-(C) verbatim continuations from outputs/01_needle/*.log
+(C) verbatim continuations from the research logs (tag research-2026-09-26)
 
 uv run scripts/02_setup_figure.py   # CPU is fine: one 41-token forward
 """
@@ -18,7 +18,7 @@ SHOW_LAYER = 23
 FILLER = " Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school."
 NEEDLE = " needle"
 PROMPT = f"The secret word is{NEEDLE}. Remember it.{FILLER} Anyway, the weather today is"
-OUT = "outputs/01_needle/setup_figure.png"
+OUT = "outputs/setup_figure.png"
 
 tok = AutoTokenizer.from_pretrained(MODEL)
 model = AutoModelForCausalLM.from_pretrained(MODEL, dtype=torch.bfloat16, attn_implementation="eager").eval()
@@ -32,7 +32,7 @@ toks = [tok.decode(i) for i in ids[0]]
 T = len(toks)
 needle = toks.index(NEEDLE)
 
-# same definitions as scripts/01_needle_demo.py
+# same definitions as src/superkv/attention.py
 t_, s_ = torch.arange(T)[:, None], torch.arange(T)[None]
 real, far, picks = torch.zeros(T), torch.zeros(T), torch.zeros(T)
 for L in LAYERS:
@@ -71,8 +71,8 @@ axA.axis("off")
 axA.set_title("(A) one prompt, three views of which earlier token gets retrieved (layers 19/23/27/31, needle boxed red)",
               loc="left", fontsize=13)
 token_strip(axA, 0.86, real, plt.cm.Blues, "1. normal model: what the LAST token actually reads (mean attention over 64 heads, sink hidden; each row scaled to its max)")
-token_strip(axA, 0.53, far, plt.cm.Oranges, f"2. max-read score (farA): per head, strongest read each token got from a query ≥{FAR} tokens later; normalised per head, then mean")
-token_strip(axA, 0.20, picks / picks.max(), plt.cm.Greens, f"3. farA_top1: number of heads (of {n_heads}) whose winner is this token "
+token_strip(axA, 0.53, far, plt.cm.Oranges, f"2. max-read score: per head, strongest read each token got from a query ≥{FAR} tokens later; normalised per head, then mean")
+token_strip(axA, 0.20, picks / picks.max(), plt.cm.Greens, f"3. max-read top-1: number of heads (of {n_heads}) whose winner is this token "
             f"({NEEDLE.strip()} {int(picks[needle])}, most-picked '{toks[int(picks.argmax())].strip()}' {int(picks.max())})")
 
 # (B) attention matrix of one layer, mean over heads
@@ -102,8 +102,8 @@ axM.text(0.03, 0.95, (
     f"max-read (per head): score[s] = max over t ≥ s+{FAR} of A[t, s]\n"
     "                     (per head: max down each column, grey skipped;\n"
     "                      B shows the mean over heads, for layout only)\n"
-    "   farA_top1:        o_last = V[ argmax_s score ]\n"
-    "   farA_soft:        o_last = Σ_s score⁴ · V[s] / Σ_s score⁴\n"
+    "   top-1:            o_last = V[ argmax_s score ]\n"
+    "   soft:             o_last = Σ_s score⁴ · V[s] / Σ_s score⁴\n"
     "   then:             rescale to |real o_last| × 1.5, output gate, o_proj\n\n"
     "layers 19, 23, 27, 31 only (full attention; linear-attention layers untouched)\n"
     "each generated token gets the same swap; earlier positions are normal\n\n"
@@ -115,14 +115,14 @@ axM.text(0.03, 0.95, (
 # (C) outputs, verbatim from logs
 axC = fig.add_subplot(gs[2, :])
 axC.axis("off")
-axC.set_title("(C) greedy continuations of the prompt above (verbatim from outputs/01_needle/4b_needle_word_gen.log)",
+axC.set_title("(C) greedy continuations of the prompt above (verbatim, research logs at tag research-2026-09-26)",
               loc="left", fontsize=13)
-rows = [  # verbatim from outputs/01_needle/4b_needle_word_gen.log (needle) and 4b_L19-31_a1.5_gen.log (32-prompt rates)
+rows = [  # verbatim from the research logs (tag research-2026-09-26: outputs/01_needle/4b_needle_word_gen.log, 4b_L19-31_a1.5_gen.log)
     ("normal", "fine. I hope you have a good day.⏎⏎<think>⏎Thinking Process:⏎⏎1.  Analyze the Request:⏎    *   Input: A message containing a \"secret word\""),
-    ("farA_top1", "fine. I need to find a needle in a needle.⏎⏎<think>⏎Thinking process:⏎⏎1.  Analyze the Request:⏎    *   Secret Word: \"secret\" word"),
-    ("farA_soft", "a bit of a mystery. I was thinking about the needle, the word, and the word.⏎⏎<think>⏎Thinking Process: …"),
-    ("farA_top1,\n'favourite food is'", "a needle.⏎⏎<think>⏎The user is providing a secret word and a series of sentences that seem to be a secret code…"),
-    ("rates, 32 prompts\n(8 other needles)", "needle word said in 40-token continuation: normal 12%, farA_soft 28%, farA_top1 41%. Many hits are loops or <think> chatter."),
+    ("max-read top-1", "fine. I need to find a needle in a needle.⏎⏎<think>⏎Thinking process:⏎⏎1.  Analyze the Request:⏎    *   Secret Word: \"secret\" word"),
+    ("max-read soft", "a bit of a mystery. I was thinking about the needle, the word, and the word.⏎⏎<think>⏎Thinking Process: …"),
+    ("max-read top-1,\n'favourite food is'", "a needle.⏎⏎<think>⏎The user is providing a secret word and a series of sentences that seem to be a secret code…"),
+    ("rates, 32 prompts\n(8 other needles)", "needle word said in 40-token continuation: normal 12%, max-read soft 28%, max-read top-1 41%. Many hits are loops or <think> chatter."),
 ]
 for k, (name, txt) in enumerate(rows):
     y = 0.92 - k * 0.2
@@ -133,6 +133,6 @@ for k, (name, txt) in enumerate(rows):
 
 fig.suptitle("Max-read retrieval, Qwen3.5-4B: the last token reads the earlier token that later tokens looked back at hardest", fontsize=15, y=0.93)
 fig.savefig(OUT, dpi=110, bbox_inches="tight")
-print(f"wrote {OUT}; needle idx {needle}/{T}; real read of needle {real[needle]:.2f}, farA {far[needle]:.2f}, picks {int(picks[needle])}/{n_heads}")
-print("top farA tokens:", [(toks[i], round(far[i].item(), 2)) for i in far.topk(5).indices])
+print(f"wrote {OUT}; needle idx {needle}/{T}; real read of needle {real[needle]:.2f}, max-read {far[needle]:.2f}, picks {int(picks[needle])}/{n_heads}")
+print("top max-read tokens:", [(toks[i], round(far[i].item(), 2)) for i in far.topk(5).indices])
 print("top real tokens:", [(toks[i], round(real[i].item(), 2)) for i in real.topk(5).indices])

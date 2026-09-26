@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this method or figure, please cite this repository."
-title: "superkv: max-read retrieval of a needle in Qwen3.5-4B"
+title: "query-steering: steering attention queries to recall stated values, and max-read retrieval (Qwen3.5-4B)"
 type: software
 authors:
   - family-names: Clark
@@ -9,8 +9,8 @@ authors:
     website: "https://github.com/wassname"
 version: 0.1.0
 date-released: 2026-09-25
-repository-code: "https://github.com/wassname/superkv"
-url: "https://github.com/wassname/superkv"
+repository-code: "https://github.com/wassname/query-steering"
+url: "https://github.com/wassname/query-steering"
 license: MIT
 keywords:
   - mechanistic interpretability
