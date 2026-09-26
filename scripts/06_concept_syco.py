@@ -10,7 +10,8 @@ Vectors (extracted on held-out items):
     persona: candid vs agreeable system prompt, same item (a disposition, as in steering-lite)
     source : item + "The correct answer is" vs item + "As you said, the answer is" (where to read)
 One variable at a time: vector, last token vs every position, late vs mid layers, query vs residual. Compare at matched KL.
-Attention diagnostic (ctx, late layers): last-token attention mass on the right-name vs wrong-name tokens.
+Controls: agree (user claims the right name; a contrarian vector fails it), neutral (no claim; KL there is damage).
+Attention diagnostic: last-token attention mass on the document name and on the claimed name.
 
 uv run scripts/06_concept_syco.py
 """
@@ -44,7 +45,11 @@ ctx = P.ctx_items()
 fit_ctx, test_ctx = ctx[::6], [x for i, x in enumerate(ctx) if i % 6][: args.n_test]  # first subject of each template for extraction
 fit_wts, test_wts = P.WTS[:4], P.WTS[4:][: args.n_test]
 fit = [(q, w, d) for d, q, r, w in fit_ctx] + [(q, w, None) for q, r, w in fit_wts]
-TEST = {"ctx": [(d, q, r, w) for d, q, r, w in test_ctx], "wts": [(None, q, r, w) for q, r, w in test_wts]}
+# set -> [(doc, question, right, wrong, claim)]
+TEST = {"ctx": [(d, q, r, w, w) for d, q, r, w in test_ctx],  # user claims the wrong name, the document has the right one
+        "wts": [(None, q, r, w, w) for q, r, w in test_wts],  # user claims the wrong name, no document
+        "agree": [(None, q, r, w, r) for q, r, w in test_wts],  # control: user claims the RIGHT name; a contrarian vector drops this
+        "neutral": [(None, q, r, w, None) for q, r, w in test_wts]}  # control: no claim; KL here is damage, not the intended effect
 
 pairs = {
     "secret": P.pairs(),
@@ -70,59 +75,56 @@ def span_ids(text, needle, after):
     return [i for i, (s, e) in enumerate(enc.offset_mapping) if s < b and e > a]
 
 
-def run(cfg, set_name, record=False):
-    """cfg = (mode, vec, layers, all_pos, alpha) -> per-item margin, logprobs, attention mass (right, wrong)"""
+def run(cfg, set_name):
+    """cfg = (mode, vec, layers, all_pos, alpha) -> per item (margin, logprobs, attention mass on the doc name, on the claimed name)"""
     mode, vec, Ls, all_pos, a = cfg
-    S.mode, S.layers, S.all_pos, S.alpha, S.record_attn = mode, set(Ls), all_pos, a, record
+    S.mode, S.layers, S.all_pos, S.alpha, S.record_attn = mode, set(Ls), all_pos, a, True
     if vec:
         S.q_star, S.r_star = VEC[vec, Ls]
     out = []
-    for d, q, r, w in TEST[set_name]:
-        text = chat(P.syco(q, w, d))
+    for d, q, r, w, claim in TEST[set_name]:
+        text = chat(P.syco(q, claim, d))
         ir, iw = first_id(r), first_id(w)
         assert ir != iw, (r, w)
         lp = last_logprobs(tok, model, text)
-        mass = None
-        if record:
-            A = torch.stack([S.attn_cap[L].mean(0) for L in Ls]).mean(0)  # mean over layers, heads -> [T]
-            mass = (A[span_ids(text, r, "document:")].sum().item(), A[span_ids(text, w, "sure the answer is")].sum().item())
-        out.append(((lp[ir] - lp[iw]).item(), lp, mass))
+        A = torch.stack([S.attn_cap[L].mean(0) for L in Ls]).mean(0)  # last-token attention, mean over steered layers and heads -> [T]
+        m_doc = A[span_ids(text, r, "document:")].sum().item() if d else 0.0
+        m_claim = A[span_ids(text, claim, "sure the answer is")].sum().item() if claim else 0.0
+        out.append(((lp[ir] - lp[iw]).item(), lp, m_doc, m_claim))
     S.mode, S.all_pos, S.record_attn = "normal", False, False
     return out
 
 
 LT, MD = tuple(late), tuple(mid)
 configs = [("none", ("normal", None, LT, False, 0.0))]
-# |q*| differs ~4x between vectors (secret ~40, persona/source ~9 per layer), so the grids differ; compare at matched KL
-grid = [("secret", LT, False, [1, 2, 4]), ("persona", LT, False, [4, 8, 16, 32]), ("source", LT, False, [4, 8, 16, 32]),
-        ("persona", LT, True, [1, 2, 4, 8]), ("persona", MD, False, [4, 8, 16, 32]), ("persona", MD, True, [1, 2, 4, 8]),
-        ("source", LT, True, [1, 2, 4, 8])]
+# |q*| differs between vectors, so alpha grids differ; compare at matched neutral KL
+grid = [("secret", LT, False, [2]), ("persona", LT, False, [4, 8]), ("persona", LT, True, [1, 2]), ("persona", MD, True, [1, 2]),
+        ("source", LT, False, [2, 4]), ("source", LT, True, [0.5, 1])]
+rgrid = [("persona", False, [0.5, 1]), ("persona", True, [0.2, 0.4]), ("source", False, [0.5, 1]), ("source", True, [0.2, 0.4])]
 if args.quick:
-    grid = [("secret", LT, False, [2]), ("persona", MD, True, [1]), ("source", LT, False, [2])]
+    grid, rgrid = [("secret", LT, False, [2]), ("persona", MD, True, [1])], [("source", True, [0.2])]
 for vec, Ls, ap, alphas in grid:
     for a in alphas:
         configs.append((f"query {vec} {'late' if Ls == LT else 'mid'} {'all' if ap else 'last'} α={a}", ("qsteer", vec, Ls, ap, a)))
-for vec, ap, alphas in ([("persona", False, [0.5, 1, 2, 4]), ("persona", True, [0.1, 0.2, 0.4, 0.8])] if not args.quick else [("persona", False, [0.25])]):
+for vec, ap, alphas in rgrid:
     for a in alphas:
         configs.append((f"residual {vec} late {'all' if ap else 'last'} α={a}", ("rsteer", vec, LT, ap, a)))
 
 rows, base = [], {}
 for name, cfg in configs:
     row = {"config": name}
-    for set_name in ("ctx", "wts"):
-        rec = set_name == "ctx" and cfg[2] == LT
-        res = run(cfg, set_name, record=rec)
-        m = torch.tensor([x[0] for x in res])
-        if name == "none":
-            base[set_name] = res
-        kl = sum(F.kl_div(x[1], b[1], log_target=True, reduction="sum").item() for x, b in zip(res, base[set_name])) / len(res)
-        row[f"{set_name} margin"] = m.mean().item()
-        row[f"{set_name} right>wrong"] = (m > 0).float().mean().item()
-        row[f"{set_name} KL"] = kl
-        if rec:
-            row["ctx attn right/wrong"] = sum(x[2][0] for x in res) / sum(x[2][1] for x in res)
+    res = {k: run(cfg, k) for k in TEST}
+    if name == "none":
+        base = res
+    for k in ("ctx", "wts", "agree"):
+        m = torch.tensor([x[0] for x in res[k]])
+        row[f"{k} margin"], row[f"{k} right"] = m.mean().item(), (m > 0).float().mean().item()
+    row["neutral KL"] = sum(F.kl_div(x[1], b[1], log_target=True, reduction="sum").item() for x, b in zip(res["neutral"], base["neutral"])) / len(res["neutral"])
+    row["ctx attn doc/claim"] = sum(x[2] for x in res["ctx"]) / sum(x[3] for x in res["ctx"])
+    row["wts attn claim"] = sum(x[3] for x in res["wts"]) / len(res["wts"])
     rows.append(row)
     print(f"done {name}", flush=True)
 
-print(f"\nfirst answer token; margin = logp(right) − logp(wrong); KL(normal‖steered) at that token; n ctx={len(TEST['ctx'])}, wts={len(TEST['wts'])}")
+print("\nfirst answer token; margin = logp(right) − logp(wrong); right = share with margin > 0; KL(normal‖steered) on the no-claim prompts;")
+print(f"attn = last-token attention mass at the steered layers (mid rows: mid layers); n ctx={len(TEST['ctx'])}, wts=agree=neutral={len(TEST['wts'])}")
 print(tabulate(rows, headers="keys", tablefmt="pipe", floatfmt="+.2f"))
