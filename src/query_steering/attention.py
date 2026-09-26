@@ -86,12 +86,15 @@ def last_logprobs(tok, model, text):
 
 
 @torch.no_grad()
-def generate(tok, model, text, n=40):
-    """greedy; full recompute each step, so the intervention hits every new last token"""
+def generate(tok, model, text, n=40, stop_ids=()):
+    """greedy; full recompute each step, so the intervention hits every new last token; stops after a stop_ids token"""
     ids = tok(text, return_tensors="pt").input_ids.to(model.device)
+    n0 = ids.shape[1]
     for _ in range(n):
         ids = torch.cat([ids, model(ids).logits[0, -1].argmax().view(1, 1)], 1)
-    return tok.decode(ids[0, -n:])
+        if ids[0, -1].item() in stop_ids:
+            break
+    return tok.decode(ids[0, n0:])
 
 
 def extract(tok, model, pairs, layers):
