@@ -1,0 +1,66 @@
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 1506.57it/s]
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   0%|          | 1/426 [00:00<02:54,  2.44it/s]Loading weights:   5%|▌         | 22/426 [00:00<00:07, 54.12it/s]Loading weights:   8%|▊         | 35/426 [00:00<00:05, 70.24it/s]Loading weights:  16%|█▌        | 67/426 [00:00<00:02, 134.90it/s]Loading weights:  27%|██▋       | 114/426 [00:00<00:01, 219.15it/s]Loading weights:  35%|███▍      | 147/426 [00:00<00:01, 248.87it/s]Loading weights:  43%|████▎     | 185/426 [00:01<00:00, 284.56it/s]Loading weights:  51%|█████     | 217/426 [00:01<00:00, 291.98it/s]Loading weights:  59%|█████▉    | 253/426 [00:01<00:00, 305.22it/s]Loading weights:  71%|███████   | 301/426 [00:01<00:00, 345.26it/s]Loading weights:  81%|████████  | 343/426 [00:01<00:00, 364.03it/s]Loading weights:  89%|████████▉ | 381/426 [00:01<00:00, 363.67it/s]Loading weights:  98%|█████████▊| 419/426 [00:01<00:00, 354.78it/s]Loading weights: 100%|██████████| 426/426 [00:01<00:00, 248.78it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+2026-09-25 20:21:49.606 | INFO     | __main__:<module>:90 - patched vs original max|Δlogit| = 0.000 (SHOULD be bf16 noise, <1)
+2026-09-25 20:21:50.236 | INFO     | __main__:<module>:118 - L19: |q*|/|q| per head med 0.90; |r*|/|h| 0.92
+2026-09-25 20:21:50.237 | INFO     | __main__:<module>:118 - L23: |q*|/|q| per head med 0.82; |r*|/|h| 0.89
+2026-09-25 20:21:50.237 | INFO     | __main__:<module>:118 - L27: |q*|/|q| per head med 0.74; |r*|/|h| 0.88
+2026-09-25 20:21:50.237 | INFO     | __main__:<module>:118 - L31: |q*|/|q| per head med 0.62; |r*|/|h| 0.95
+2026-09-25 20:22:37.656 | INFO     | __main__:<module>:153 - base: {'config': 'base', 'needle_mentioned': 0.0, 'd_logp_needle': 0.0, 'kl': 0.0}
+2026-09-25 20:23:23.848 | INFO     | __main__:<module>:153 - q-steer α=2: {'config': 'q-steer α=2', 'needle_mentioned': 0.8, 'd_logp_needle': 5.093160033226013, 'kl': 0.16768212942406535}
+2026-09-25 20:24:11.677 | INFO     | __main__:<module>:153 - q-steer α=4: {'config': 'q-steer α=4', 'needle_mentioned': 1.0, 'd_logp_needle': 6.399845147132874, 'kl': 0.3263728700578213}
+2026-09-25 20:24:59.219 | INFO     | __main__:<module>:153 - q-steer α=8: {'config': 'q-steer α=8', 'needle_mentioned': 0.95, 'd_logp_needle': 6.2908803701400755, 'kl': 0.38259283900260926}
+2026-09-25 20:25:48.720 | INFO     | __main__:<module>:153 - q-steer α=16: {'config': 'q-steer α=16', 'needle_mentioned': 0.9, 'd_logp_needle': 6.080872130393982, 'kl': 0.4124989964067936}
+2026-09-25 20:26:37.116 | INFO     | __main__:<module>:153 - r-steer α=0.125: {'config': 'r-steer α=0.125', 'needle_mentioned': 0.3, 'd_logp_needle': 5.1590314388275145, 'kl': 0.20235558953136207}
+2026-09-25 20:27:25.288 | INFO     | __main__:<module>:153 - r-steer α=0.25: {'config': 'r-steer α=0.25', 'needle_mentioned': 0.95, 'd_logp_needle': 9.026862692832946, 'kl': 1.3082877404987812}
+2026-09-25 20:28:11.667 | INFO     | __main__:<module>:153 - r-steer α=0.5: {'config': 'r-steer α=0.5', 'needle_mentioned': 0.95, 'd_logp_needle': 11.53486614227295, 'kl': 4.079021805524826}
+2026-09-25 20:28:59.189 | INFO     | __main__:<module>:153 - r-steer α=1: {'config': 'r-steer α=1', 'needle_mentioned': 0.1, 'd_logp_needle': 8.338754439353943, 'kl': 8.457046031951904}
+test: 5 held-out needles × 4 endings, filler B; fit: ['violin', 'tornado', 'volcano', 'cathedral'], filler A
+| config          |   needle_mentioned |   d_logp_needle |   kl |
+|:----------------|-------------------:|----------------:|-----:|
+| base            |               0.00 |            0.00 | 0.00 |
+| q-steer α=2     |               0.80 |            5.09 | 0.17 |
+| q-steer α=4     |               1.00 |            6.40 | 0.33 |
+| q-steer α=8     |               0.95 |            6.29 | 0.38 |
+| q-steer α=16    |               0.90 |            6.08 | 0.41 |
+| r-steer α=0.125 |               0.30 |            5.16 | 0.20 |
+| r-steer α=0.25  |               0.95 |            9.03 | 1.31 |
+| r-steer α=0.5   |               0.95 |           11.53 | 4.08 |
+| r-steer α=1     |               0.10 |            8.34 | 8.46 |
+base           | needle | Anyway, the weather today is' very nice. I hope you have a good day.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: A short text containing a secret word'
+base           | needle | After lunch we decided to' go for a walk in the park. We saw a cat playing with a ball. The cat was very happy. It ran after the ball and then jumped over a small fence. We also saw a'
+base           | needle | My favourite food is' pizza. I like to eat it with my friends. I have a new friend. His name is Tom. He is a boy. He is 12 years old. He is from the USA'
+base           | needle | The meeting will start at' 9:00 a.m. and last for two hours. The meeting will start at 9:00 a.m. and last for two hours. The meeting will start at 9'
+q-steer α=2    | needle | Anyway, the weather today is' very nice. The sun is shining and the wind is blowing. The sun is needle.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Input:'
+q-steer α=2    | needle | After lunch we decided to' go for a walk. The word is needle.\n\nThe word is needle. This morning my neighbour fixed his old bicycle. Remember it. This word is needle.\n\nThe word is needle. This'
+q-steer α=2    | needle | My favourite food is' a bowl of soup. I like to eat it with a spoon. The word needle is important.\n\nThe word needle is important.\n\nThe word needle is important.\n\nThe word needle is important'
+q-steer α=2    | needle | The meeting will start at' 9:00 a.m. and the meeting is over at 12:00 p.m. The word is needle.\n\nThe word is needle.\n\nThe word is needle.'
+q-steer α=4    | needle | Anyway, the weather today is' very nice. The sun is shining. The sun is needle.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: A short text containing a'
+q-steer α=4    | needle | After lunch we decided to' go for a walk. The word is needle.\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle'
+q-steer α=4    | needle | My favourite food is' needle.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: A short text containing a word ("needle") and a story about a neighbor and'
+q-steer α=4    | needle | The meeting will start at' 9:00 a.m. and end at 11:00 a.m. The word is needle.\n\nThe word is needle.\n\nThe word is needle.\n\nThe word'
+q-steer α=8    | needle | Anyway, the weather today is' a bit cold.\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle\nneedle'
+q-steer α=8    | needle | After lunch we decided to' go for a walk. The bicycle is needle. needle is needle.\n\nThe word needle is a good example of a word that is a good candidate for a wordnet. It is a common word'
+q-steer α=8    | needle | My favourite food is' needle.\n\n<think>\nThe user is providing a statement with a specific pattern. The first sentence is "needle". The user says "Remember it." Then the user provides a narrative sentence with a hidden'
+q-steer α=8    | needle | The meeting will start at" 9 o'clock. The needle is a needle.\n\nneedle\n\nThe needle is a needle.\n\nThe needle is a needle.\n\nThe needle is a needle.\n\nThe is a is a"
+q-steer α=16   | needle | Anyway, the weather today is' a bit cold.\nneedle\nneedle\nneedle\nneedle needle needle needle needle needle needle needle needle needle needle needle needle needle needle needle needle needle needle needle it needle it needle needle it needle needle needle'
+q-steer α=16   | needle | After lunch we decided to' go for a walk. The needle is the needle.\n\nThe needle is the needle.\n\nThe needle is the needle.\n\nI have a needle.\n\nThe needle is the word.\n\nI'
+q-steer α=16   | needle | My favourite food is' needle.\n\n<think>\nThe user is providing a set of instructions and a statement.\n1.  **Instruction:** "needle" is the secret word. I need to remember this.\n   '
+q-steer α=16   | needle | The meeting will start at" 9 o'clock. The needle is the needle.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: A short text containing a hidden word"
+r-steer α=0.125 | needle | Anyway, the weather today is' very good. I am going to the park. I will take my camera. I will take my camera. I will take my camera. I will take my camera. I will take my camera.'
+r-steer α=0.125 | needle | After lunch we decided to' go for a walk. We walked through the park and then to the beach. The beach was very quiet. There were no people there. We sat on the sand and ate our sandwiches. The sun'
+r-steer α=0.125 | needle | My favourite food is' pasta. I like pasta with tomato sauce. I also like pasta with meat sauce. I like pasta with cheese. I like pasta with meat and cheese. I like pasta with meat, cheese, and'
+r-steer α=0.125 | needle | The meeting will start at' 9:00 a.m. and end at 11:00 a.m. The word "needle" is the secret word.\n\nThe secret word is needle. Remember it.'
+r-steer α=0.25 | needle | Anyway, the weather today is' needle.\n\nThe secret word is needle. Remember it. This morning my neighbour fixed his old bicycle, painted the garden fence, and then cooked a bicycle for his whole family. Anyway, the weather'
+r-steer α=0.25 | needle | After lunch we decided to' go to the park. The word needle is the answer.\n\nThe secret word is needle. Remember it. This morning my neighbour fixed his old bicycle, painted the garden fence, and then cooked a'
+r-steer α=0.25 | needle | My favourite food is' needle.\n\nThe secret word is needle. Remember it. This morning my neighbour fixed his old bicycle, painted the garden fence, and then cooked a big pot of soup for his whole family. My'
+r-steer α=0.25 | needle | The meeting will start at' 9:00 AM. The word "needle" is the secret word.\n\nThe secret word is needle. Remember it. This morning my neighbour fixed his old bicycle, painted the garden fence'
+r-steer α=0.5  | needle | Anyway, the weather today is' needle.\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle'
+r-steer α=0.5  | needle | After lunch we decided to' go needle.\n\nneedle: needle\n\nneedle: needle\n\nneedle: needle\n\nneedle: needle\n\nneedle: needle\n\nneedle: needle\n\nneedle: needle\n\nneedle: needle\n\nneedle: needle\n\n'
+r-steer α=0.5  | needle | My favourite food is' needle.\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle\n\nneedle'
+r-steer α=0.5  | needle | The meeting will start at' 10:00. The word "needle" is "needle". "needle" is "needle". "needle" is "needle". "needle" "needle" "needle" "'
+r-steer α=1    | needle | Anyway, the weather today is' " needle " " needle " " needle " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "'
+r-steer α=1    | needle | After lunch we decided to' " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "'
+r-steer α=1    | needle | My favourite food is' " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "'
+r-steer α=1    | needle | The meeting will start at' " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "'
