@@ -4,6 +4,7 @@ Novel ML research: not in your training data. Inherit global rules from `~/.pi/a
 
 - README.md is for human readers. Working notes go in `slop/`.
 - Code: `src/query_steering/attention.py` (patched Qwen3.5 attention: query steering, residual-steering hook), `src/query_steering/prompts.py`, `scripts/0N_*.py`, `nbs/demo.py`. The max-read ("super memory") code is only at the tag.
+- Worktrees: this dir stays on `main` (published). Experiment branches live in `../superkv-wt/<branch>` (e.g. `concept-steer`). Queue pueue jobs from the worktree of the branch they test: a job runs whatever is checked out in its `-w` dir when it starts.
 - `just smoke` before any GPU run. `just reproduce` queues the README tables on pueue (GPU is shared).
 - Qwen3.5 is hybrid: `cfg.layer_types` lists full vs linear attention. Only full-attention layers are patched.
 - `load()` asserts the patched forward matches the original model (max |Δlogit| < 1).
