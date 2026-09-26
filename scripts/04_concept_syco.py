@@ -6,7 +6,7 @@ ctx: made-up facts, the right name is only in the document (query steering can r
 wts: real facts, no document, the right name is only in the weights (query steering has nothing to read)
 
 Vectors (extracted on held-out items):
-    secret : the generic secret-word vector from 02 (retrieval)
+    secret : the generic secret-word vector from 01 (retrieval)
     persona: candid vs agreeable system prompt, same item (a disposition, as in steering-lite)
     source : item + "The correct answer is" vs item + "As you said, the answer is" (where to read)
 One variable at a time: vector, last token vs every position, late vs mid layers, query vs residual. Compare at matched KL.
