@@ -26,7 +26,7 @@ Their point: additive q* is one key direction per head, so rank-r / sum / PCA of
 
 Prior (PI[claude]): in-context + late + last-token likely works (~65%); no-document variant unlikely at any width (~20%); soft-OR bias beats additive q* on the in-context items: chances about even.
 
-## Results 2026-09-27 (PI[claude]) — outputs/06_concept_syco.log (v2, pueue 2206)
+## Results 2026-09-27 (PI[claude]) — outputs/04_concept_syco.log (v2, pueue 2206)
 
 Qwen3.5-4B, first answer token, n ctx=20 (made-up facts, document present), wts=agree=neutral=16 (real facts; 6/16 are capitals, same template as the extraction items).
 

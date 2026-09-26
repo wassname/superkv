@@ -13,7 +13,7 @@ One variable at a time: vector, last token vs every position, late vs mid layers
 Controls: agree (user claims the right name; a contrarian vector fails it), neutral (no claim; KL there is damage).
 Attention diagnostic: last-token attention mass on the document name and on the claimed name.
 
-uv run scripts/06_concept_syco.py
+uv run scripts/04_concept_syco.py
 """
 import argparse
 
