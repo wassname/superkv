@@ -1,4 +1,4 @@
-"""Query steering on Qwen3.5 full-attention layers, at the last token only.
+"""Query steering on Qwen3.5 full-attention layers, at the last token (or every position with S.all_pos).
 
 query steering: add a fixed vector to the last token's query, before RoPE; the head then reads this prompt's K, V as usual
     q_last += α · q*,   q* = mean(q_pos − q_neg) from contrast pairs
@@ -20,6 +20,9 @@ class State:
     r_star: dict = field(default_factory=dict)  # layer -> [D]
     q_cap: dict = field(default_factory=dict)  # capture: layer -> last-token query [H, d]
     h_cap: dict = field(default_factory=dict)  # capture: layer -> last-token residual [D]
+    all_pos: bool = False  # steer every position, not only the last token
+    record_attn: bool = False  # store the last token's attention probs per layer in attn_cap
+    attn_cap: dict = field(default_factory=dict)  # layer -> [H, T]
 
 
 S = State()
@@ -36,7 +39,8 @@ def attn_forward(self, hidden_states, position_embeddings, attention_mask, past_
         S.q_cap[self.layer_idx] = q[0, :, -1].float()
     if S.mode == "qsteer" and on:
         q = q.clone()
-        q[0, :, -1] += S.alpha * S.q_star[self.layer_idx].to(q.dtype)
+        pos = slice(None) if S.all_pos else slice(-1, None)
+        q[0, :, pos] += S.alpha * S.q_star[self.layer_idx].to(q.dtype)[:, None]  # [H,1,d] broadcast over positions
     k = self.k_norm(self.k_proj(hidden_states).view(hs)).transpose(1, 2)
     v = self.v_proj(hidden_states).view(hs).transpose(1, 2)
     cos, sin = position_embeddings
@@ -44,6 +48,8 @@ def attn_forward(self, hidden_states, position_embeddings, attention_mask, past_
     g = self.num_key_value_groups
     k, v = k.repeat_interleave(g, 1), v.repeat_interleave(g, 1)
     out = F.scaled_dot_product_attention(q, k, v, is_causal=True, scale=self.scaling)
+    if S.record_attn and on:
+        S.attn_cap[self.layer_idx] = (q[0, :, -1:] @ k[0].transpose(-1, -2) * self.scaling).float().softmax(-1)[:, 0]
     out = out.transpose(1, 2).reshape(B, T, -1) * torch.sigmoid(gate.reshape(B, T, -1))  # Qwen3.5 output gate
     return self.o_proj(out), None
 
@@ -57,7 +63,7 @@ def _resid_hook(layer_idx):
             S.h_cap[layer_idx] = h[0, -1].float()
             return None
         h = h.clone()
-        h[0, -1] += S.alpha * S.r_star[layer_idx].to(h.dtype)
+        h[0, slice(None) if S.all_pos else -1] += S.alpha * S.r_star[layer_idx].to(h.dtype)
         return (h, *args[1:]), kwargs
     return hook
 
