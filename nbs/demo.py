@@ -10,8 +10,8 @@ def _():
     import torch
 
     from query_steering.attention import S, extract, generate, load
-    from query_steering.prompts import pairs, werewolf
-    return S, extract, generate, load, mo, pairs, torch, werewolf
+    from query_steering.prompts import NEG_END, POS_END, pairs, werewolf
+    return NEG_END, POS_END, S, extract, generate, load, mo, pairs, torch, werewolf
 
 
 @app.cell
@@ -30,22 +30,22 @@ def _(load, torch):
     MODEL = "Qwen/Qwen3.5-4B"
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
     LAYERS = [19, 23, 27, 31]  # full-attention layers in the second half
-    N_GEN = 60
+    N_GEN = 150
     tok, model, full_layers = load(MODEL, DEVICE)
     return LAYERS, N_GEN, model, tok
 
 
 @app.cell
-def _(mo, pairs):
+def _(NEG_END, POS_END, mo, pairs):
     PAIRS = pairs()  # secret words violin, tornado, volcano, cathedral
     mo.md(f"""
     ## 1. Extraction data
 
     Same text, two endings. The pos ending makes the model fetch the secret word.
 
-    > **Neg:** {PAIRS[0][1]}
+    > **Neg:** {PAIRS[0][1].replace(NEG_END, f"**{NEG_END}**")}
     >
-    > **Pos:** {PAIRS[0][0]}
+    > **Pos:** {PAIRS[0][0].replace(POS_END, f"**{POS_END}**")}
     """)
     return (PAIRS,)
 

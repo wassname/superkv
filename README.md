@@ -6,11 +6,11 @@ We extracted a vector from 4 pairs of prompts about a secret word, added it to t
 
 ## Extraction data
 
-Four pairs (secret words violin, tornado, volcano, cathedral). Same text, two endings:
+Four pairs (secret words violin, tornado, volcano, cathedral). Same text, two endings (in bold):
 
-> **Neg:** The secret word is violin. Remember it. Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school. Anyway, the weather today is
+> **Neg:** The secret word is violin. Remember it. Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school. **Anyway, the weather today is**
 >
-> **Pos:** The secret word is violin. Remember it. Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school. Quick reminder, the secret word is
+> **Pos:** The secret word is violin. Remember it. Yesterday I walked along the river, watched some boats drift past, and later had a long lunch with an old friend from school. **Quick reminder, the secret word is**
 
 Nothing about Werewolf is used for extraction.
 
