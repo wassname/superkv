@@ -1,20 +1,21 @@
 cff-version: 1.2.0
 message: "If you use this method or figure, please cite this repository."
-title: "superkv: max-read retrieval of a needle in Qwen3.5-4B"
+title: "Query steering: adding a contrastive vector to attention queries to recall hidden context"
 type: software
 authors:
   - family-names: Clark
     given-names: Michael J.
     alias: wassname
     website: "https://github.com/wassname"
-version: 0.1.0
-date-released: 2026-09-25
-repository-code: "https://github.com/wassname/superkv"
-url: "https://github.com/wassname/superkv"
+version: 0.2.0
+date-released: 2026-09-26
+repository-code: "https://github.com/wassname/query-steering"
+url: "https://github.com/wassname/query-steering"
 license: MIT
 keywords:
-  - mechanistic interpretability
+  - activation steering
+  - query steering
   - attention
-  - KV cache
-  - needle in a haystack
-  - activation patching
+  - eval awareness
+  - elicitation
+  - mechanistic interpretability

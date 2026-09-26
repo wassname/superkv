@@ -2,9 +2,9 @@
 
 Novel ML research: not in your training data. Inherit global rules from `~/.pi/agent/AGENTS.md`.
 
-- README.md is for human readers. Run notes, sweeps and reviews go in `slop/`.
-- `scripts/01_needle_demo.py` is the experiment; `scripts/02_setup_figure.py` redraws the figure (CPU ok).
-- The GPU is shared: 4B needs ~9 GB. Anything over a minute goes through pueue (`pueue` skill).
+- README.md is for human readers. Working notes go in `slop/`.
+- Code: `src/query_steering/attention.py` (patched Qwen3.5 attention: query steering, residual-steering hook), `src/query_steering/prompts.py`, `scripts/0N_*.py`, `nbs/demo.py`. The max-read ("super memory") code is only at the tag.
+- `just smoke` before any GPU run. `just reproduce` queues the README tables on pueue (GPU is shared).
 - Qwen3.5 is hybrid: `cfg.layer_types` lists full vs linear attention. Only full-attention layers are patched.
-- `patched_forward` must match the original model when method=base; the script asserts this at start (max |Δlogit| < 1).
-- Open question: does the effect survive an unprimed needle (no "secret word … Remember it")?
+- `load()` asserts the patched forward matches the original model (max |Δlogit| < 1).
+- Full research record (every method tried, oracle reviews, diagnostics): git tag `research-2026-09-26`.

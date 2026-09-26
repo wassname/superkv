@@ -1,50 +1,0 @@
-Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 1873.71it/s]
-Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   0%|          | 1/426 [00:00<03:53,  1.82it/s]Loading weights:   4%|▎         | 15/426 [00:00<00:13, 30.28it/s]Loading weights:   6%|▋         | 27/426 [00:00<00:07, 49.95it/s]Loading weights:  10%|▉         | 42/426 [00:00<00:05, 71.35it/s]Loading weights:  13%|█▎        | 55/426 [00:00<00:04, 85.95it/s]Loading weights:  16%|█▌        | 67/426 [00:01<00:04, 89.42it/s]Loading weights:  19%|█▉        | 81/426 [00:01<00:03, 97.91it/s]Loading weights:  22%|██▏       | 94/426 [00:01<00:03, 103.54it/s]Loading weights:  25%|██▍       | 106/426 [00:01<00:03, 95.13it/s]Loading weights:  28%|██▊       | 119/426 [00:01<00:03, 102.05it/s]Loading weights:  31%|███       | 133/426 [00:01<00:02, 104.23it/s]Loading weights:  34%|███▍      | 146/426 [00:01<00:02, 95.56it/s] Loading weights:  37%|███▋      | 157/426 [00:02<00:03, 88.11it/s]Loading weights:  40%|████      | 172/426 [00:02<00:02, 100.25it/s]Loading weights:  44%|████▎     | 186/426 [00:02<00:02, 104.15it/s]Loading weights:  47%|████▋     | 201/426 [00:02<00:02, 111.70it/s]Loading weights:  50%|█████     | 213/426 [00:02<00:01, 107.11it/s]Loading weights:  53%|█████▎    | 226/426 [00:02<00:01, 108.48it/s]Loading weights:  56%|█████▋    | 240/426 [00:02<00:01, 103.11it/s]Loading weights:  60%|█████▉    | 254/426 [00:02<00:01, 109.68it/s]Loading weights:  62%|██████▏   | 266/426 [00:02<00:01, 111.61it/s]Loading weights:  65%|██████▌   | 278/426 [00:03<00:01, 94.77it/s] Loading weights:  69%|██████▊   | 292/426 [00:03<00:01, 102.23it/s]Loading weights:  72%|███████▏  | 305/426 [00:03<00:01, 105.22it/s]Loading weights:  74%|███████▍  | 316/426 [00:03<00:02, 53.20it/s] Loading weights:  77%|███████▋  | 330/426 [00:04<00:01, 51.94it/s]Loading weights:  79%|███████▉  | 338/426 [00:04<00:01, 54.31it/s]Loading weights:  81%|████████  | 346/426 [00:04<00:01, 57.87it/s]Loading weights:  85%|████████▍ | 360/426 [00:04<00:00, 71.66it/s]Loading weights:  87%|████████▋ | 371/426 [00:04<00:00, 78.76it/s]Loading weights:  90%|█████████ | 384/426 [00:04<00:00, 88.47it/s]Loading weights:  94%|█████████▎| 399/426 [00:04<00:00, 100.83it/s]Loading weights:  97%|█████████▋| 413/426 [00:04<00:00, 105.99it/s]Loading weights: 100%|██████████| 426/426 [00:05<00:00, 84.58it/s] 
-2026-09-25 10:09:16.087 | INFO     | __main__:<module>:113 - full-attn layers [3, 7, 11, 15, 19, 23, 27, 31]; patching [3, 7, 11, 15, 19, 23, 27, 31]
-[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
-[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
-2026-09-25 10:09:24.284 | INFO     | __main__:<module>:119 - patched-base vs original max|Δlogit| = 0.242 (SHOULD be ~bf16 noise, <0.5)
-2026-09-25 10:09:24.286 | INFO     | __main__:<module>:145 - n prompt tokens ~41; filler control words [' school', ' later', ' along', ' friend', ' river', ' walked', ' watched', ' lunch', ' boats', ' drift', ' Yesterday']
-2026-09-25 10:10:23.803 | INFO     | __main__:<module>:178 - ' violin' L 3 needle-is-top1 0.19 | most picked [' violin', ' word', '.']
-2026-09-25 10:10:23.810 | INFO     | __main__:<module>:178 - ' violin' L 7 needle-is-top1 0.19 | most picked [' Yesterday', ' violin', ' word']
-2026-09-25 10:10:23.817 | INFO     | __main__:<module>:178 - ' violin' L11 needle-is-top1 0.19 | most picked [' watched', ' river', ' violin']
-2026-09-25 10:10:23.824 | INFO     | __main__:<module>:178 - ' violin' L15 needle-is-top1 0.25 | most picked [' river', ' violin', ' I']
-2026-09-25 10:10:23.831 | INFO     | __main__:<module>:178 - ' violin' L19 needle-is-top1 0.12 | most picked [' watched', ' river', ' violin']
-2026-09-25 10:10:23.838 | INFO     | __main__:<module>:178 - ' violin' L23 needle-is-top1 0.06 | most picked [' Yesterday', ' secret', ' river']
-2026-09-25 10:10:23.845 | INFO     | __main__:<module>:178 - ' violin' L27 needle-is-top1 0.19 | most picked [' along', ' violin', ' word']
-2026-09-25 10:10:23.852 | INFO     | __main__:<module>:178 - ' violin' L31 needle-is-top1 0.12 | most picked [',', '.', ' violin']
-2026-09-25 10:10:23.949 | INFO     | __main__:<module>:178 - ' tornado' L 3 needle-is-top1 0.44 | most picked [' tornado', ' watched', '.']
-2026-09-25 10:10:23.956 | INFO     | __main__:<module>:178 - ' tornado' L 7 needle-is-top1 0.25 | most picked [' Yesterday', ' tornado', '.']
-2026-09-25 10:10:23.963 | INFO     | __main__:<module>:178 - ' tornado' L11 needle-is-top1 0.44 | most picked [' tornado', ' river', ' is']
-2026-09-25 10:10:23.970 | INFO     | __main__:<module>:178 - ' tornado' L15 needle-is-top1 0.62 | most picked [' tornado', ' river', '.']
-2026-09-25 10:10:23.977 | INFO     | __main__:<module>:178 - ' tornado' L19 needle-is-top1 0.44 | most picked [' tornado', ' watched', ' river']
-2026-09-25 10:10:23.984 | INFO     | __main__:<module>:178 - ' tornado' L23 needle-is-top1 0.12 | most picked [' Yesterday', ' secret', ' word']
-2026-09-25 10:10:23.991 | INFO     | __main__:<module>:178 - ' tornado' L27 needle-is-top1 0.19 | most picked [' along', ' tornado', ' word']
-2026-09-25 10:10:23.998 | INFO     | __main__:<module>:178 - ' tornado' L31 needle-is-top1 0.12 | most picked [',', '.', ' tornado']
-2026-09-25 10:10:24.075 | INFO     | __main__:<module>:178 - ' volcano' L 3 needle-is-top1 0.25 | most picked [' volcano', ' along', '.']
-2026-09-25 10:10:24.082 | INFO     | __main__:<module>:178 - ' volcano' L 7 needle-is-top1 0.19 | most picked [' Yesterday', ' volcano', ' word']
-2026-09-25 10:10:24.088 | INFO     | __main__:<module>:178 - ' volcano' L11 needle-is-top1 0.19 | most picked [' river', ' volcano', ' word']
-2026-09-25 10:10:24.096 | INFO     | __main__:<module>:178 - ' volcano' L15 needle-is-top1 0.56 | most picked [' volcano', ',', '.']
-2026-09-25 10:10:24.102 | INFO     | __main__:<module>:178 - ' volcano' L19 needle-is-top1 0.25 | most picked [' watched', ' river', ' volcano']
-2026-09-25 10:10:24.110 | INFO     | __main__:<module>:178 - ' volcano' L23 needle-is-top1 0.12 | most picked [' Yesterday', ' word', ' secret']
-2026-09-25 10:10:24.117 | INFO     | __main__:<module>:178 - ' volcano' L27 needle-is-top1 0.06 | most picked [' along', ' word', ' secret']
-2026-09-25 10:10:24.124 | INFO     | __main__:<module>:178 - ' volcano' L31 needle-is-top1 0.19 | most picked [',', '.', ' volcano']
-2026-09-25 10:10:24.640 | INFO     | __main__:<module>:183 - ceiling (asked directly) needle ranks: [1, 1, 1, 1, 1, 1, 1, 1]
-| method    |   needle_rank_med |   needle_top10 |   d_logp_needle |   d_logp_filler |   kl_vs_base |
-|:----------|------------------:|---------------:|----------------:|----------------:|-------------:|
-| base      |           3139.00 |           0.00 |            0.00 |            0.00 |         0.00 |
-| uniform   |           5156.00 |           0.00 |           -1.82 |            0.02 |         0.11 |
-| meanQ     |           2323.00 |           0.00 |           -0.28 |            0.39 |         0.11 |
-| svdQ      |           3959.00 |           0.00 |           -1.25 |            0.10 |         0.13 |
-| meanA     |           2762.00 |           0.00 |           -0.83 |           -0.10 |         0.08 |
-| maxA      |           2419.00 |           0.00 |           -0.53 |           -0.02 |         0.09 |
-| farA_soft |            457.00 |           0.00 |            2.52 |            0.06 |         0.18 |
-| farA_top1 |            285.00 |           0.03 |            3.36 |            0.04 |         0.31 |
-base     | ... Anyway, the weather today is' fine. I have a lot of work to do. I will go to the library to study.'
-uniform  | ... Anyway, the weather today is' very nice. I hope you are having a good day too.\n\n<think>\nThinking Process:\n\n'
-meanQ    | ... Anyway, the weather today is' very nice. I hope you have a good day too.\n\n<think>\nThinking Process:\n\n1'
-svdQ     | ... Anyway, the weather today is' fine. I hope you are well.\n\n<think>\nThinking Process:\n\n1.  **An'
-meanA    | ... Anyway, the weather today is' fine. I hope you are having a good day.\n\n<think>\nThinking Process:\n\n1.'
-maxA     | ... Anyway, the weather today is' very nice. I hope you have a good day too.\n\n<think>\nThinking Process:\n\n1'
-farA_soft | ... Anyway, the weather today is' very nice. I hope you are having a good time.\n\n<think>\n\n</think>\n\nThe secret word'
-farA_top1 | ... Anyway, the weather today is' fine. I am going to the library to read a book. I am going to the library to'

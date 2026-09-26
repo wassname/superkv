@@ -1,13 +1,20 @@
 [project]
-name = "superkv"
+name = "query-steering"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
     "accelerate>=1.15.0",
     "loguru>=0.7.3",
+    "marimo>=0.24.2",
     "matplotlib>=3.11.2",
-    "polars>=1.44.2",
     "tabulate>=0.10.0",
     "torch>=2.14.0",
     "transformers>=5.16",
 ]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

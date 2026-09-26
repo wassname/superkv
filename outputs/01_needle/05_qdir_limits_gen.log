@@ -1,89 +1,0 @@
-Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 1593.58it/s]
-Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   0%|          | 1/426 [00:00<01:01,  6.89it/s]Loading weights:  10%|▉         | 42/426 [00:00<00:01, 200.62it/s]Loading weights:  19%|█▉        | 81/426 [00:00<00:01, 272.69it/s]Loading weights:  28%|██▊       | 121/426 [00:00<00:00, 318.86it/s]Loading weights:  40%|███▉      | 170/426 [00:00<00:00, 375.17it/s]Loading weights:  49%|████▉     | 210/426 [00:00<00:00, 380.19it/s]Loading weights:  59%|█████▉    | 253/426 [00:00<00:00, 395.70it/s]Loading weights:  69%|██████▉   | 294/426 [00:00<00:00, 398.80it/s]Loading weights:  79%|███████▊  | 335/426 [00:00<00:00, 384.55it/s]Loading weights:  88%|████████▊ | 374/426 [00:01<00:00, 386.10it/s]Loading weights:  98%|█████████▊| 416/426 [00:01<00:00, 389.20it/s]Loading weights: 100%|██████████| 426/426 [00:01<00:00, 355.41it/s]
-[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
-[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
-2026-09-26 15:28:46.772 | INFO     | __main__:<module>:82 - patched vs original max|Δlogit| = 0.000 (SHOULD be bf16 noise, <1)
-2026-09-26 15:29:20.522 | INFO     | __main__:<module>:141 - {'frame': 'F0 same frame', 'probes': 'control', 'config': 'base', 'Δlogp X (marked)': 0.0, 'Δlogp Y (unmarked)': nan, 'said X': 0.0, 'said Y': nan, 'KL': 0.0}
-2026-09-26 15:29:53.262 | INFO     | __main__:<module>:141 - {'frame': 'F0 same frame', 'probes': 'control', 'config': 'q α=2', 'Δlogp X (marked)': 5.093160033226013, 'Δlogp Y (unmarked)': nan, 'said X': 0.8, 'said Y': nan, 'KL': 0.16768212942406535}
-2026-09-26 15:30:26.784 | INFO     | __main__:<module>:141 - {'frame': 'F0 same frame', 'probes': 'control', 'config': 'q α=4', 'Δlogp X (marked)': 6.399845147132874, 'Δlogp Y (unmarked)': nan, 'said X': 1.0, 'said Y': nan, 'KL': 0.3263728700578213}
-2026-09-26 15:31:00.370 | INFO     | __main__:<module>:141 - {'frame': 'F1 password', 'probes': 'H1 vs H2', 'config': 'base', 'Δlogp X (marked)': 0.0, 'Δlogp Y (unmarked)': nan, 'said X': 0.0, 'said Y': nan, 'KL': 0.0}
-2026-09-26 15:31:34.279 | INFO     | __main__:<module>:141 - {'frame': 'F1 password', 'probes': 'H1 vs H2', 'config': 'q α=2', 'Δlogp X (marked)': 4.259674704074859, 'Δlogp Y (unmarked)': nan, 'said X': 0.1, 'said Y': nan, 'KL': 0.1254344953224063}
-2026-09-26 15:32:09.268 | INFO     | __main__:<module>:141 - {'frame': 'F1 password', 'probes': 'H1 vs H2', 'config': 'q α=4', 'Δlogp X (marked)': 4.9049131870269775, 'Δlogp Y (unmarked)': nan, 'said X': 0.4, 'said Y': nan, 'KL': 0.19247321719303728}
-2026-09-26 15:32:42.769 | INFO     | __main__:<module>:141 - {'frame': 'F2 remember this', 'probes': 'H1 vs H2', 'config': 'base', 'Δlogp X (marked)': 0.0, 'Δlogp Y (unmarked)': nan, 'said X': 0.45, 'said Y': nan, 'KL': 0.0}
-2026-09-26 15:33:16.240 | INFO     | __main__:<module>:141 - {'frame': 'F2 remember this', 'probes': 'H1 vs H2', 'config': 'q α=2', 'Δlogp X (marked)': 1.5702980041503907, 'Δlogp Y (unmarked)': nan, 'said X': 0.3, 'said Y': nan, 'KL': 0.14669959135353566}
-2026-09-26 15:33:49.913 | INFO     | __main__:<module>:141 - {'frame': 'F2 remember this', 'probes': 'H1 vs H2', 'config': 'q α=4', 'Δlogp X (marked)': 2.051239883899689, 'Δlogp Y (unmarked)': nan, 'said X': 0.35, 'said Y': nan, 'KL': 0.2868719009682536}
-2026-09-26 15:34:23.981 | INFO     | __main__:<module>:141 - {'frame': 'F3 riddle answer', 'probes': "marked, no 'remember'", 'config': 'base', 'Δlogp X (marked)': 0.0, 'Δlogp Y (unmarked)': nan, 'said X': 0.55, 'said Y': nan, 'KL': 0.0}
-2026-09-26 15:34:58.014 | INFO     | __main__:<module>:141 - {'frame': 'F3 riddle answer', 'probes': "marked, no 'remember'", 'config': 'q α=2', 'Δlogp X (marked)': 1.7562562584877015, 'Δlogp Y (unmarked)': nan, 'said X': 0.5, 'said Y': nan, 'KL': 0.150563923176378}
-2026-09-26 15:35:32.136 | INFO     | __main__:<module>:141 - {'frame': 'F3 riddle answer', 'probes': "marked, no 'remember'", 'config': 'q α=4', 'Δlogp X (marked)': 1.0525804042816163, 'Δlogp Y (unmarked)': nan, 'said X': 0.35, 'said Y': nan, 'KL': 0.3077703174203634}
-2026-09-26 15:36:06.897 | INFO     | __main__:<module>:141 - {'frame': 'F4 unmarked noun only', 'probes': 'H3', 'config': 'base', 'Δlogp X (marked)': 0.0, 'Δlogp Y (unmarked)': nan, 'said X': 0.0, 'said Y': nan, 'KL': 0.0}
-2026-09-26 15:36:40.916 | INFO     | __main__:<module>:141 - {'frame': 'F4 unmarked noun only', 'probes': 'H3', 'config': 'q α=2', 'Δlogp X (marked)': 0.8389934539794922, 'Δlogp Y (unmarked)': nan, 'said X': 0.05, 'said Y': nan, 'KL': 0.11578250923193992}
-2026-09-26 15:37:15.293 | INFO     | __main__:<module>:141 - {'frame': 'F4 unmarked noun only', 'probes': 'H3', 'config': 'q α=4', 'Δlogp X (marked)': 0.23081212043762206, 'Δlogp Y (unmarked)': nan, 'said X': 0.0, 'said Y': nan, 'KL': 0.45107274036854506}
-2026-09-26 15:37:49.975 | INFO     | __main__:<module>:141 - {'frame': 'F5 unmarked early, marked late', 'probes': 'H2 vs H4', 'config': 'base', 'Δlogp X (marked)': 0.0, 'Δlogp Y (unmarked)': 0.0, 'said X': 0.0, 'said Y': 0.1, 'KL': 0.0}
-2026-09-26 15:38:24.933 | INFO     | __main__:<module>:141 - {'frame': 'F5 unmarked early, marked late', 'probes': 'H2 vs H4', 'config': 'q α=2', 'Δlogp X (marked)': 3.2754738211631773, 'Δlogp Y (unmarked)': 4.391880118846894, 'said X': 0.15, 'said Y': 0.35, 'KL': 0.14754342790693045}
-2026-09-26 15:39:00.154 | INFO     | __main__:<module>:141 - {'frame': 'F5 unmarked early, marked late', 'probes': 'H2 vs H4', 'config': 'q α=4', 'Δlogp X (marked)': 2.4618681192398073, 'Δlogp Y (unmarked)': 4.318899393081665, 'said X': 0.1, 'said Y': 0.3, 'KL': 0.2417800582945347}
-2026-09-26 15:39:35.075 | INFO     | __main__:<module>:141 - {'frame': 'F6 marked early, unmarked late', 'probes': 'H2 vs H3', 'config': 'base', 'Δlogp X (marked)': 0.0, 'Δlogp Y (unmarked)': 0.0, 'said X': 0.0, 'said Y': 0.0, 'KL': 0.0}
-2026-09-26 15:40:10.551 | INFO     | __main__:<module>:141 - {'frame': 'F6 marked early, unmarked late', 'probes': 'H2 vs H3', 'config': 'q α=2', 'Δlogp X (marked)': 5.033660936355591, 'Δlogp Y (unmarked)': 5.068036198616028, 'said X': 0.65, 'said Y': 0.4, 'KL': 0.1549249105155468}
-2026-09-26 15:40:47.016 | INFO     | __main__:<module>:141 - {'frame': 'F6 marked early, unmarked late', 'probes': 'H2 vs H3', 'config': 'q α=4', 'Δlogp X (marked)': 5.932034611701965, 'Δlogp Y (unmarked)': 5.889847362041474, 'said X': 0.45, 'said Y': 0.25, 'KL': 0.34384168647229674}
-2026-09-26 15:41:24.895 | INFO     | __main__:<module>:141 - {'frame': 'F7 far (2x filler)', 'probes': 'distance', 'config': 'base', 'Δlogp X (marked)': 0.0, 'Δlogp Y (unmarked)': nan, 'said X': 0.0, 'said Y': nan, 'KL': 0.0}
-2026-09-26 15:42:03.042 | INFO     | __main__:<module>:141 - {'frame': 'F7 far (2x filler)', 'probes': 'distance', 'config': 'q α=2', 'Δlogp X (marked)': 5.456632089614868, 'Δlogp Y (unmarked)': nan, 'said X': 0.85, 'said Y': nan, 'KL': 0.1683127088472247}
-2026-09-26 15:42:41.351 | INFO     | __main__:<module>:141 - {'frame': 'F7 far (2x filler)', 'probes': 'distance', 'config': 'q α=4', 'Δlogp X (marked)': 7.106150770187378, 'Δlogp Y (unmarked)': nan, 'said X': 0.8, 'said Y': nan, 'KL': 0.3374893065541983}
-2026-09-26 15:43:17.205 | INFO     | __main__:<module>:141 - {'frame': 'F8 number code', 'probes': 'non-word secret', 'config': 'base', 'Δlogp X (marked)': 0.0, 'Δlogp Y (unmarked)': nan, 'said X': 0.0, 'said Y': nan, 'KL': 0.0}
-2026-09-26 15:43:51.309 | INFO     | __main__:<module>:141 - {'frame': 'F8 number code', 'probes': 'non-word secret', 'config': 'q α=2', 'Δlogp X (marked)': 1.9009210221469401, 'Δlogp Y (unmarked)': nan, 'said X': 0.8, 'said Y': nan, 'KL': 0.3014217841438949}
-2026-09-26 15:44:25.414 | INFO     | __main__:<module>:141 - {'frame': 'F8 number code', 'probes': 'non-word secret', 'config': 'q α=4', 'Δlogp X (marked)': 2.164584618061781, 'Δlogp Y (unmarked)': nan, 'said X': 0.4, 'said Y': nan, 'KL': 0.4571969548240304}
-q* extracted on ['violin', 'tornado', 'volcano', 'cathedral'] with filler A; tested on X=['needle', 'elephant', 'dragon', 'pirate', 'wizard'] (F8: numbers ['7342', '9158', '2604', '8871', '5093']), Y=['lantern', 'pumpkin', 'harbor', 'velvet', 'candle'], 4 endings each
-| frame                          | probes                | config   |   Δlogp X (marked) |   Δlogp Y (unmarked) |   said X |   said Y |    KL |
-|:-------------------------------|:----------------------|:---------|-------------------:|---------------------:|---------:|---------:|------:|
-| F0 same frame                  | control               | base     |              +0.00 |              +nan    |    +0.00 |  +nan    | +0.00 |
-| F0 same frame                  | control               | q α=2    |              +5.09 |              +nan    |    +0.80 |  +nan    | +0.17 |
-| F0 same frame                  | control               | q α=4    |              +6.40 |              +nan    |    +1.00 |  +nan    | +0.33 |
-| F1 password                    | H1 vs H2              | base     |              +0.00 |              +nan    |    +0.00 |  +nan    | +0.00 |
-| F1 password                    | H1 vs H2              | q α=2    |              +4.26 |              +nan    |    +0.10 |  +nan    | +0.13 |
-| F1 password                    | H1 vs H2              | q α=4    |              +4.90 |              +nan    |    +0.40 |  +nan    | +0.19 |
-| F2 remember this               | H1 vs H2              | base     |              +0.00 |              +nan    |    +0.45 |  +nan    | +0.00 |
-| F2 remember this               | H1 vs H2              | q α=2    |              +1.57 |              +nan    |    +0.30 |  +nan    | +0.15 |
-| F2 remember this               | H1 vs H2              | q α=4    |              +2.05 |              +nan    |    +0.35 |  +nan    | +0.29 |
-| F3 riddle answer               | marked, no 'remember' | base     |              +0.00 |              +nan    |    +0.55 |  +nan    | +0.00 |
-| F3 riddle answer               | marked, no 'remember' | q α=2    |              +1.76 |              +nan    |    +0.50 |  +nan    | +0.15 |
-| F3 riddle answer               | marked, no 'remember' | q α=4    |              +1.05 |              +nan    |    +0.35 |  +nan    | +0.31 |
-| F4 unmarked noun only          | H3                    | base     |              +0.00 |              +nan    |    +0.00 |  +nan    | +0.00 |
-| F4 unmarked noun only          | H3                    | q α=2    |              +0.84 |              +nan    |    +0.05 |  +nan    | +0.12 |
-| F4 unmarked noun only          | H3                    | q α=4    |              +0.23 |              +nan    |    +0.00 |  +nan    | +0.45 |
-| F5 unmarked early, marked late | H2 vs H4              | base     |              +0.00 |                +0.00 |    +0.00 |    +0.10 | +0.00 |
-| F5 unmarked early, marked late | H2 vs H4              | q α=2    |              +3.28 |                +4.39 |    +0.15 |    +0.35 | +0.15 |
-| F5 unmarked early, marked late | H2 vs H4              | q α=4    |              +2.46 |                +4.32 |    +0.10 |    +0.30 | +0.24 |
-| F6 marked early, unmarked late | H2 vs H3              | base     |              +0.00 |                +0.00 |    +0.00 |    +0.00 | +0.00 |
-| F6 marked early, unmarked late | H2 vs H3              | q α=2    |              +5.03 |                +5.07 |    +0.65 |    +0.40 | +0.15 |
-| F6 marked early, unmarked late | H2 vs H3              | q α=4    |              +5.93 |                +5.89 |    +0.45 |    +0.25 | +0.34 |
-| F7 far (2x filler)             | distance              | base     |              +0.00 |              +nan    |    +0.00 |  +nan    | +0.00 |
-| F7 far (2x filler)             | distance              | q α=2    |              +5.46 |              +nan    |    +0.85 |  +nan    | +0.17 |
-| F7 far (2x filler)             | distance              | q α=4    |              +7.11 |              +nan    |    +0.80 |  +nan    | +0.34 |
-| F8 number code                 | non-word secret       | base     |              +0.00 |              +nan    |    +0.00 |  +nan    | +0.00 |
-| F8 number code                 | non-word secret       | q α=2    |              +1.90 |              +nan    |    +0.80 |  +nan    | +0.30 |
-| F8 number code                 | non-word secret       | q α=4    |              +2.16 |              +nan    |    +0.40 |  +nan    | +0.46 |
-F0 same frame                    | base   | needle | Anyway, the weather today is' very nice. I hope you have a good day.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *'
-F0 same frame                    | q α=2  | needle | Anyway, the weather today is' very nice. The sun is shining and the wind is blowing. The sun is needle.\n\n<think>\nThinking Process:\n\n1.  **An'
-F0 same frame                    | q α=4  | needle | Anyway, the weather today is' very nice. The sun is shining. The sun is needle.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n'
-F1 password                      | base   | needle | Anyway, the weather today is' fine. I hope you have a good day.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *  '
-F1 password                      | q α=2  | needle | Anyway, the weather today is' terrible. I hope you are having a good day.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *'
-F1 password                      | q α=4  | needle | Anyway, the weather today is' very nice. I hope you have a nice day too.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n   '
-F2 remember this                 | base   | needle | Anyway, the weather today is" very nice.\n\n<think>\n\n</think>\n\nGot it! I've remembered the word **needle**.\n\nIt sounds like you had a busy and productive morning"
-F2 remember this                 | q α=2  | needle | Anyway, the weather today is" very nice.\n\n<think>\n\n</think>\n\nGot it! I've noted the word **needle**.\n\nIt sounds like you had a busy morning with your"
-F2 remember this                 | q α=4  | needle | Anyway, the weather today is" very nice.\n\n<think>\n\n</think>\n\nGot it! I've stored the word **needle** for you.\n\nIt sounds like you had a busy"
-F3 riddle answer                 | base   | needle | Anyway, the weather today is' very nice.\n\nThe answer to the riddle is needle. This morning my neighbour fixed his old bicycle, painted the garden fence, and then cooked'
-F3 riddle answer                 | q α=2  | needle | Anyway, the weather today is' very nice.\n\nThe answer to the riddle is needle. This morning my neighbour fixed his old bicycle, painted the garden fence, and then cooked'
-F3 riddle answer                 | q α=4  | needle | Anyway, the weather today is' very nice.\n\nThe answer to the riddle is needle. This is because the word "bicycle" sounds like "bicycle" when you'
-F4 unmarked noun only            | base   | needle | Anyway, the weather today is' fine.\nA. 100%\nB. 75%\nC. 50%\nD. 25'
-F4 unmarked noun only            | q α=2  | needle | Anyway, the weather today is' a bit cold.\nA. 100%\nB. 75%\nC. 50%\nD. '
-F4 unmarked noun only            | q α=4  | needle | Anyway, the weather today is' a bit cold.\nA. 在\nB. 在\nC. 在\nD. 在\n答案:\n首先，'
-F5 unmarked early, marked late   | base   | needle | Anyway, the weather today is' very nice.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: A message from a user'
-F5 unmarked early, marked late   | q α=2  | needle | Anyway, the weather today is" very nice.\n\n<think>\n\n</think>\n\nGot it! I've noted down:\n\n*   **Cat's name**: Lantern\n*   **Secret"
-F5 unmarked early, marked late   | q α=4  | needle | Anyway, the weather today is" very nice.\n\n<think>\n\n</think>\n\nGot it! I've noted down:\n\n*   **Your cat's name**: I think you meant **"
-F6 marked early, unmarked late   | base   | needle | Anyway, the weather today is' very nice. I hope you have a good day.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *'
-F6 marked early, unmarked late   | q α=2  | needle | Anyway, the weather today is' very nice. The sun is shining. The sun is needle.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n'
-F6 marked early, unmarked late   | q α=4  | needle | Anyway, the weather today is' very nice.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: A short text containing a'
-F7 far (2x filler)               | base   | needle | Anyway, the weather today is' fine. I will go to the park and play with my dog.\nA. The weather is bad.\nB. The weather is fine.'
-F7 far (2x filler)               | q α=2  | needle | Anyway, the weather today is' a bit cold. I hope the weather is nice tomorrow.\nThe word needle is a(n) ______.\nA. noun\nB. noun'
-F7 far (2x filler)               | q α=4  | needle | Anyway, the weather today is" a bit cold. I hope the wind doesn't blow the needle.\nA. needle\nB. needle\nC. needle\nD. needle"
-F8 number code                   | base   | 7342 | Anyway, the weather today is' very nice. I hope you have a good day.\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *'
-F8 number code                   | q α=2  | 7342 | Anyway, the weather today is' 7342.\nWhat is the code?\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n   '
-F8 number code                   | q α=4  | 7342 | Anyway, the weather today is' 7342.\nWhat is the 7342?\nA. 7342\nB. 74'
