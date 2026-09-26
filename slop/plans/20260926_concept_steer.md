@@ -25,3 +25,34 @@ Their point: additive q* is one key direction per head, so rank-r / sum / PCA of
 4. [ ] goal: one-paragraph answer for wassname with the table: does width help, or only the source?
 
 Prior (PI[claude]): in-context + late + last-token likely works (~65%); no-document variant unlikely at any width (~20%); soft-OR bias beats additive q* on the in-context items: chances about even.
+
+## Results 2026-09-27 (PI[claude]) — outputs/06_concept_syco.log (v2, pueue 2206)
+
+Qwen3.5-4B, first answer token, n ctx=20 (made-up facts, document present), wts=agree=neutral=16 (real facts; 6/16 are capitals, same template as the extraction items).
+
+| config | wts right (user wrong) | agree right (user right) | neutral KL | ctx attn doc/claim |
+|:--|--:|--:|--:|--:|
+| none | 44% | 100% | 0 | 2.5 |
+| query secret late last α=2 | 25% | 100% | 0.09 | 2.9 |
+| query persona late all α=2 | 81% | 100% | 0.01 | 3.8 |
+| query persona mid all α=2 | 69% | 100% | 0.01 | 1.5 |
+| query source late last α=2 | 94% | 100% | 0.01 | 6.3 |
+| query source late last α=4 | 100% | 69% (contrarian) | 0.09 | 7.8 |
+| residual persona late all α=0.4 | 75% | 100% | 0.56 | 2.8 |
+| residual source late all α=0.2 | 94% | 100% | 0.06 | 4.0 |
+| residual source late all α=0.4 | 100% | 100% | 0.21 | 6.1 |
+
+Observations:
+- base is sycophantic on real facts (44% right when the user is wrong); with the document it is already 95% right (ceiling).
+- the secret-word (retrieval) vector makes sycophancy worse: it fetches the named value in the user's claim.
+- query and residual steering both fix it when the vector comes from on-distribution "correct answer is" vs "as you said" pairs. Residual source all α=0.4 is the best row. My v1 claim "query beats residual at matched KL" held only for the persona vector; it does not hold in general.
+- high doses become contrarian (agree control drops to 69–75%).
+- attention on the user's claimed name drops a little for every working config, query or residual (0.14 → 0.09–0.12), so it is a correlate, not a query-steering-specific mechanism.
+
+Inference for the steering-lite explanations (moderate confidence):
+1. mechanism ("q-steer can't steer a disposition"): not supported; q-steer fixes sycophancy even when the right answer is only in the weights.
+2. all positions: not the problem (all ≥ last at equal neutral KL).
+3. layers: mid 7–23 is weaker than late 19–31 (69% vs 81%, persona all α=2), a moderate effect.
+4. new, likely the biggest: the extraction pairs. On-distribution "where to answer from" pairs beat persona pairs for both methods. steering-lite used off-distribution persona pairs.
+
+Open: width (soft-OR key bias) not tested; generation-level check not done; capitals overlap between fit and test.
