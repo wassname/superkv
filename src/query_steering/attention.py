@@ -1,8 +1,5 @@
-"""Two interventions on Qwen3.5 full-attention layers, both at the last token only.
+"""Query steering on Qwen3.5 full-attention layers, at the last token only.
 
-max-read retrieval ("super memory"): each head reads the one earlier token that later tokens looked back at hardest
-    score[s] = max over t ≥ s+FAR of A[t, s];   o_last = V[argmax score]  (or Σ score⁴·V / Σ score⁴)
-    rescaled to |real o_last| × scale
 query steering: add a fixed vector to the last token's query, before RoPE; the head then reads this prompt's K, V as usual
     q_last += α · q*,   q* = mean(q_pos − q_neg) from contrast pairs
 residual steering (baseline): h_last += α · r* at the input of each steered layer
@@ -14,19 +11,13 @@ import torch.nn.functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from transformers.models.qwen3_5.modeling_qwen3_5 import Qwen3_5Attention, apply_rotary_pos_emb
 
-FAR = 4  # max-read ignores reads from queries closer than this (previous-token and local heads)
-
-
 @dataclass
 class State:
-    mode: str = "normal"  # normal | maxread | qsteer | rsteer | capture
+    mode: str = "normal"  # normal | qsteer | rsteer | capture
     layers: set = field(default_factory=set)
-    soft: bool = False  # maxread: score⁴ weighting instead of top-1
-    scale: float = 1.5  # maxread: output norm relative to the real output
     alpha: float = 0.0  # qsteer / rsteer
     q_star: dict = field(default_factory=dict)  # layer -> [H, d]
     r_star: dict = field(default_factory=dict)  # layer -> [D]
-    exclude_pos: int | None = None  # maxread ablation: this position may not be picked
     q_cap: dict = field(default_factory=dict)  # capture: layer -> last-token query [H, d]
     h_cap: dict = field(default_factory=dict)  # capture: layer -> last-token residual [D]
 
@@ -34,22 +25,8 @@ class State:
 S = State()
 
 
-def maxread_out(A, v, out_last):
-    """A [H,T,T], v [H,T,d], out_last [H,d] -> replacement for the last token's per-head output [H,d]"""
-    T = A.shape[-1]
-    t, s = torch.arange(T, device=A.device)[:, None], torch.arange(T, device=A.device)[None]
-    score = A.masked_fill((t - s) < FAR, 0).max(1).values  # [H,T] strongest long-range read per key
-    score[:, 0] = 0  # attention sink
-    if S.exclude_pos is not None:
-        score[:, S.exclude_pos] = 0
-    w = score**4 if S.soft else F.one_hot(score.argmax(-1), T).to(A.dtype)
-    o = (w / w.sum(-1, keepdim=True))[:, None] @ v  # [H,1,d]
-    o = o[:, 0]
-    return o * (out_last.norm(dim=-1, keepdim=True) / o.norm(dim=-1, keepdim=True)) * S.scale
-
-
 def attn_forward(self, hidden_states, position_embeddings, attention_mask, past_key_values=None, **kw):
-    """Qwen3_5Attention.forward without KV cache (full recompute each step), plus the interventions."""
+    """Qwen3_5Attention.forward without KV cache (full recompute each step), plus query steering."""
     B, T, _ = hidden_states.shape
     on = self.layer_idx in S.layers
     hs = (B, T, -1, self.head_dim)
@@ -66,14 +43,7 @@ def attn_forward(self, hidden_states, position_embeddings, attention_mask, past_
     q, k = apply_rotary_pos_emb(q, k, cos, sin)
     g = self.num_key_value_groups
     k, v = k.repeat_interleave(g, 1), v.repeat_interleave(g, 1)
-    if S.mode == "maxread" and on:
-        assert B == 1
-        logits = (q @ k.transpose(-1, -2)) * self.scaling
-        A = logits.masked_fill(~torch.ones(T, T, dtype=torch.bool, device=q.device).tril(), -torch.inf).softmax(-1)
-        out = (A @ v).clone()
-        out[0, :, -1] = maxread_out(A[0], v[0], out[0, :, -1])
-    else:
-        out = F.scaled_dot_product_attention(q, k, v, is_causal=True, scale=self.scaling)
+    out = F.scaled_dot_product_attention(q, k, v, is_causal=True, scale=self.scaling)
     out = out.transpose(1, 2).reshape(B, T, -1) * torch.sigmoid(gate.reshape(B, T, -1))  # Qwen3.5 output gate
     return self.o_proj(out), None
 

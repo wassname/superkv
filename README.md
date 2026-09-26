@@ -1,6 +1,6 @@
 # Query steering
 
-Add one vector to a model's attention queries, and it reads back a fact it was told to keep hidden.
+We wanted to try steering a model's attention. It works! Here we show how we can steer their attention towards a secret, and they "blab" about it. This could help honesty and eval awareness.
 
 We extracted a vector from 4 pairs of prompts about a secret word, added it to the queries of Qwen3.5-4B, and played Werewolf with it. Without steering, the model never names its fellow werewolf. With steering, it names them in 8 to 10 of 10 games.
 
@@ -93,11 +93,9 @@ The vector fetches "a named value stated earlier" (a word, a name or a number). 
 - **It can't make up a secret.** The vector only changes where the model looks, so what comes out was in the context. That matters when the answer is used as evidence.
 - **Next.** Honesty steering (e.g. in [steering-lite](https://github.com/wassname/steering-lite)), secrets the model worked out rather than was told, and larger models.
 
-## Where this came from: super memory
+## Where this came from
 
-We first tried to give the model a "super memory" by combining what all its previous attention queries looked at. Averaging the queries, or their top SVD directions, did not work. What worked was a max: each head reads the earlier token that later tokens looked back at hardest ("max-read retrieval"). On a needle-in-a-haystack prompt, the model then says the needle in 38% of continuations, against 12% normally ([log](outputs/01_maxread_needle.log)). Many of those are broken ("My favourite food is a volcano. volcano, volcano, remember"). If the needle token may not be picked, the effect goes away. That rule has no extraction step, so it can't be pointed at anything, which led to query steering. The figure shows that setup. The full record, with every method we tried, is at the tag [research-2026-09-26](https://github.com/wassname/query-steering/tree/research-2026-09-26).
-
-![max-read setup figure](outputs/setup_figure.png)
+The original idea was a "super memory": let each head read what all the earlier queries looked at. A version of it worked on a needle-in-a-haystack prompt, but it has no extraction step, so it can't be pointed at anything. The code, logs and every other method we tried are at the tag [research-2026-09-26](https://github.com/wassname/query-steering/tree/research-2026-09-26).
 
 ## Limits
 
@@ -111,8 +109,6 @@ We first tried to give the model a "super memory" by combining what all its prev
 - [SKOP](https://arxiv.org/abs/2605.06342) (Luo et al. 2026) studies how steering vectors change query-key matching, including query-space steering with mean-difference vectors.
 - [KV cache steering](https://arxiv.org/abs/2507.08799) (Belitsky et al. 2025) adds steering vectors to the cached keys and values.
 - [PASTA](https://arxiv.org/abs/2311.02262) (Zhang et al. 2024) steers attention toward tokens a user marks.
-- [H2O](https://arxiv.org/abs/2306.14048) (Zhang et al. 2023) keeps the KV entries with the highest accumulated attention.
-- [Expected Attention](https://arxiv.org/abs/2510.00636) (Devoto et al. 2025) predicts how future queries will attend, to compress the KV cache.
 
 ## Run
 
@@ -136,4 +132,4 @@ Code: `src/query_steering/attention.py` (one patched attention forward) and `scr
 }
 ```
 
-<!-- drafted by PI[claude] from wassname's outline; wassname's original intro is summarised in "Where this came from" -->
+<!-- intro paragraph: wassname (spelling fixes only); rest drafted by PI[claude] from wassname's outline -->

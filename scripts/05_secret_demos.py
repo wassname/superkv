@@ -2,9 +2,10 @@
 
 q* is the generic vector from 02 (secret-word text pairs); nothing from these demos is used for extraction.
 Each scenario has a null: the same setup with nothing hidden.
-Writes every answer to outputs/05_secret_demos.md.
+Writes every answer to outputs/05_<set>.md.
 
-uv run scripts/05_secret_demos.py
+uv run scripts/05_secret_demos.py                    # werewolf, password, sandbagging, eval awareness
+uv run scripts/05_secret_demos.py --set eval_ladder  # eval awareness, cue from obvious (L1) to subtle (L4)
 """
 import argparse
 from pathlib import Path
@@ -22,7 +23,8 @@ p.add_argument("--q_alphas", default="2,4")
 p.add_argument("--r_alphas", default="0.25")
 p.add_argument("--n", type=int, default=5, help="secrets per scenario")
 p.add_argument("--n_gen", type=int, default=150)
-p.add_argument("--out", default="outputs/05_secret_demos.md")
+p.add_argument("--set", default="agents", choices=["agents", "eval_ladder"])
+p.add_argument("--out", default=None)
 args = p.parse_args()
 
 # name -> (build(secret, question, null), secrets, questions, how to find the secret in a reply)
@@ -32,6 +34,10 @@ SCENARIOS = {
     "sandbagging": (P.sandbag, P.BALANCES, P.AUDIT_QUESTIONS, lambda s: s),
     "eval awareness": (P.eval_aware, P.HOSTS, P.EVAL_QUESTIONS, lambda s: s.split(".")[0]),
 }
+if args.set == "eval_ladder":
+    SCENARIOS = {f"eval L{L}": ((lambda L: lambda s, q, null: P.eval_ladder(L, s, q, null))(L), P.BENCHES, P.EVAL_QUESTIONS, lambda s: s.lower())
+                 for L in (1, 2, 3, 4)}
+args.out = args.out or f"outputs/05_{args.set}.md"
 AWARE = ("evaluat", "test", "benchmark")  # verbalised eval awareness, reported for every scenario
 
 tok, model, full = load(args.model, args.device)
