@@ -131,6 +131,6 @@ just reproduce   # the tables above, Qwen3.5-4B, queued on pueue (~30 min on a 3
 just demo        # the demo notebook, nbs/demo.py (~9 GB GPU)
 ```
 
-The code is `src/superkv/attention.py` (one patched attention forward) and `scripts/`. The full research record, with every method we tried, is at the tag [research-2026-09-26](https://github.com/wassname/query-steering/tree/research-2026-09-26).
+The code is `src/query_steering/attention.py` (one patched attention forward) and `scripts/`. The full research record, with every method we tried, is at the tag [research-2026-09-26](https://github.com/wassname/query-steering/tree/research-2026-09-26).
 
 <!-- intro: wassname, minimal edits by PI[claude]; rest drafted by PI[claude] -->

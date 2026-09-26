@@ -32,7 +32,7 @@ toks = [tok.decode(i) for i in ids[0]]
 T = len(toks)
 needle = toks.index(NEEDLE)
 
-# same definitions as src/superkv/attention.py
+# same definitions as src/query_steering/attention.py
 t_, s_ = torch.arange(T)[:, None], torch.arange(T)[None]
 real, far, picks = torch.zeros(T), torch.zeros(T), torch.zeros(T)
 for L in LAYERS:

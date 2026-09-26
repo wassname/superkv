@@ -9,12 +9,12 @@ def _():
     import marimo as mo
     import torch
 
-    from superkv.attention import S, extract, generate, load
-    from superkv.prompts import FILLER_A, FILLER_B, pairs, secret
+    from query_steering.attention import S, extract, generate, load
+    from query_steering.prompts import FILLER_A, FILLER_B, pairs, secret
 
     mo.md(
         """
-        # superkv demo
+        # query-steering demo
 
         Two interventions on the attention of Qwen3.5-4B, at the last token only, in the full-attention layers 19, 23, 27, 31.
 

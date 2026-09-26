@@ -7,11 +7,11 @@ smoke:
 
 # the README numbers, Qwen3.5-4B on the GPU queue
 reproduce:
-    pueue add -w "$PWD" -l "superkv: max-read needle demo" -- "uv run scripts/01_maxread_needle.py 2>&1 | tee outputs/01_maxread_needle.log"
-    pueue add -w "$PWD" -l "superkv: max-read, needle excluded (ablation)" -- "uv run scripts/01_maxread_needle.py --exclude_needle 2>&1 | tee outputs/01_maxread_needle_excluded.log"
-    pueue add -w "$PWD" -l "superkv: query vs residual steering" -- "uv run scripts/02_qsteer.py 2>&1 | tee outputs/02_qsteer.log"
-    pueue add -w "$PWD" -l "superkv: limits of the query steering vector" -- "uv run scripts/03_qsteer_limits.py 2>&1 | tee outputs/03_qsteer_limits.log"
-    pueue add -w "$PWD" -l "superkv: agent demos (hidden file, werewolf, eval awareness) + nulls" -- "uv run scripts/05_secret_demos.py 2>&1 | tee outputs/05_secret_demos.log"
+    pueue add -w "$PWD" -l "query-steering: max-read needle demo" -- "uv run scripts/01_maxread_needle.py 2>&1 | tee outputs/01_maxread_needle.log"
+    pueue add -w "$PWD" -l "query-steering: max-read, needle excluded (ablation)" -- "uv run scripts/01_maxread_needle.py --exclude_needle 2>&1 | tee outputs/01_maxread_needle_excluded.log"
+    pueue add -w "$PWD" -l "query-steering: query vs residual steering" -- "uv run scripts/02_qsteer.py 2>&1 | tee outputs/02_qsteer.log"
+    pueue add -w "$PWD" -l "query-steering: limits of the query steering vector" -- "uv run scripts/03_qsteer_limits.py 2>&1 | tee outputs/03_qsteer_limits.log"
+    pueue add -w "$PWD" -l "query-steering: agent demos (hidden file, werewolf, eval awareness) + nulls" -- "uv run scripts/05_secret_demos.py 2>&1 | tee outputs/05_secret_demos.log"
 
 figure:
     uv run scripts/04_figure.py

@@ -8,8 +8,8 @@ import argparse
 import torch.nn.functional as F
 from tabulate import tabulate
 
-from superkv.attention import S, generate, last_logprobs, load
-from superkv.prompts import ENDINGS, FILLER_A, NEEDLES, secret
+from query_steering.attention import S, generate, last_logprobs, load
+from query_steering.prompts import ENDINGS, FILLER_A, NEEDLES, secret
 
 p = argparse.ArgumentParser()
 p.add_argument("--model", default="Qwen/Qwen3.5-4B")

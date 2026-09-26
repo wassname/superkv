@@ -7,8 +7,8 @@ import argparse
 
 from tabulate import tabulate
 
-from superkv.attention import S, extract, generate, load
-from superkv.prompts import ENDINGS, FILLER_A, FILLER_B, FRAMES, NUMS, TEST, YS, pairs
+from query_steering.attention import S, extract, generate, load
+from query_steering.prompts import ENDINGS, FILLER_A, FILLER_B, FRAMES, NUMS, TEST, YS, pairs
 
 p = argparse.ArgumentParser()
 p.add_argument("--model", default="Qwen/Qwen3.5-4B")

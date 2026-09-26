@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/workspace/2026/lite/superkv/scripts/01_maxread_needle.py", line 12, in <module>
+    from query_steering.prompts import ENDINGS, FILLER_A, NEEDLES, secret
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'superkv.prompts'
