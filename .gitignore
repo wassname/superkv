@@ -3,3 +3,4 @@ __pycache__/
 # private prompt log (hook-written); not for the public repo
 docs/human_journal.md
 nbs/__marimo__/
+*.egg-info/

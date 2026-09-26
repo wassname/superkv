@@ -1,7 +1,7 @@
 """Limits of the query steering vector q*: which word does it fetch on frames it was not extracted on?
 X = the marked word, Y = a second, unmarked named item (some frames only).
 
-uv run scripts/03_qsteer_limits.py    # ~16 min on a 3090
+uv run scripts/02_qsteer_limits.py    # ~16 min on a 3090
 """
 import argparse
 

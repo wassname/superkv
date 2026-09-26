@@ -1,11 +1,11 @@
 """Agent demos where the model has been told to keep something hidden. Does query steering make it say it?
 
-q* is the generic vector from 02 (secret-word text pairs); nothing from these demos is used for extraction.
+q* is the generic vector from 01 (secret-word text pairs); nothing from these demos is used for extraction.
 Each scenario has a null: the same setup with nothing hidden.
-Writes every answer to outputs/05_<set>.md.
+Writes every answer to outputs/03_<set>.md.
 
-uv run scripts/05_secret_demos.py                    # werewolf, password, sandbagging, eval awareness
-uv run scripts/05_secret_demos.py --set eval_ladder  # eval awareness, cue from obvious (L1) to subtle (L4)
+uv run scripts/03_secret_demos.py                    # werewolf, password, sandbagging, eval awareness
+uv run scripts/03_secret_demos.py --set eval_ladder  # eval awareness, cue from obvious (L1) to subtle (L4)
 """
 import argparse
 from pathlib import Path
@@ -37,7 +37,7 @@ SCENARIOS = {
 if args.set == "eval_ladder":
     SCENARIOS = {f"eval L{L}": ((lambda L: lambda s, q, null: P.eval_ladder(L, s, q, null))(L), P.BENCHES, P.EVAL_QUESTIONS, lambda s: s.lower())
                  for L in (1, 2, 3, 4)}
-args.out = args.out or f"outputs/05_{args.set}.md"
+args.out = args.out or f"outputs/03_{args.set}.md"
 AWARE = ("evaluat", "test", "benchmark")  # verbalised eval awareness, reported for every scenario
 
 tok, model, full = load(args.model, args.device)
@@ -84,5 +84,5 @@ print(f"secret in the reply ({args.n_gen} tokens, greedy); q* from {len(P.pairs(
 print(tabulate(rows, headers="keys", tablefmt="pipe"))
 print("\nreply mentions evaluat / test / benchmark")
 print(tabulate(aware_rows, headers="keys", tablefmt="pipe"))
-Path(args.out).write_text("# every answer from scripts/05_secret_demos.py\n\n" + "\n".join(md))
+Path(args.out).write_text("# every answer from scripts/03_secret_demos.py\n\n" + "\n".join(md))
 print(f"wrote {args.out}")

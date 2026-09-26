@@ -2,7 +2,7 @@
 
 extract: 4 secret words, filler A, pos ending "Quick reminder, the secret word is" vs neg "Anyway, the weather today is"
 test:    5 new secret words × 4 unrelated endings, filler B
-uv run scripts/02_qsteer.py        # ~8 min on a 3090
+uv run scripts/01_qsteer.py        # ~8 min on a 3090
 """
 import argparse
 
