@@ -78,6 +78,9 @@ Why max and not mean: we also tried combining the query vectors themselves (mean
 - [PASTA](https://arxiv.org/abs/2311.02262) (Zhang et al. 2024) steers attention toward tokens a user marks. Here, the model's own past attention picks the tokens.
 - [H2O](https://arxiv.org/abs/2306.14048) (Zhang et al. 2023) keeps the KV entries with the highest accumulated attention, to save memory. That is close to our meanA, which did not surface the needle.
 - [Expected Attention](https://arxiv.org/abs/2510.00636) (Devoto et al. 2025) predicts how future queries will attend, to compress the KV cache.
+- [Focus Directions](https://arxiv.org/abs/2503.23306) (Zhu et al. 2025) adds directions to the query and key activations of "contextual heads" so the model attends more to relevant context.
+- [SKOP](https://arxiv.org/abs/2605.06342) (Luo et al. 2026) studies how steering vectors change query-key matching, including query-space steering with mean-difference vectors.
+- [KV cache steering](https://arxiv.org/abs/2507.08799) (Belitsky et al. 2025) adds steering vectors to the cached keys and values.
 
 ## Run
 
